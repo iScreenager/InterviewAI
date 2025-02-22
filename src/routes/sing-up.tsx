@@ -1,16 +1,7 @@
 import { SignUp } from "@clerk/clerk-react";
 
 const SignUpPage = () => {
-  return (
-    <SignUp
-      path="/signup"
-      appearance={{
-        elements: {
-          footer: "hidden",
-        },
-      }}
-    />
-  );
+  return <SignUp path="/signup" />;
 };
 
 export default SignUpPage;
