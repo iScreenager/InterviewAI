@@ -1,4 +1,5 @@
 import { Container } from "@/components/container";
+import { Button } from "@/components/ui/button";
 import { useAuth } from "@clerk/clerk-react";
 import { Link } from "react-router-dom";
 
@@ -27,10 +28,10 @@ const HomePage = () => {
         </div>
 
         <div className="mt-6">
-          <Link to={isSignedIn ? "/generate" : "/signin"} className="w-full">
-            <button className="px-6 py-3 text-white font-semibold text-lg rounded-2xl bg-gradient-to-r from-blue-500 to-purple-600 hover:opacity-90 transition">
+          <Link to={isSignedIn ? "/generate" : "/signin"}>
+            <Button className="px-6 py-3 text-white font-semibold text-lg rounded-2xl bg-gradient-to-r from-blue-500 to-purple-600 hover:opacity-90 transition">
               Get Started
-            </button>
+            </Button>
           </Link>
         </div>
       </Container>

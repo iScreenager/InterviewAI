@@ -4,7 +4,6 @@ import { z } from "zod";
 import { Interview } from "@/types";
 import { CustomBreadCrumb } from "./custom-bread-crumb";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
 import { Headings } from "./headings";
 import { Button } from "./ui/button";
@@ -30,6 +29,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { db } from "@/config/firebase.config";
+import { useNavigate } from "react-router-dom";
 
 interface FormMockInterviewProps {
   inititalData: Interview | null;
@@ -54,10 +54,10 @@ export const FormMockInterview = ({ inititalData }: FormMockInterviewProps) => {
     resolver: zodResolver(formSchema),
     defaultValues: inititalData || {},
   });
-
+  const navigate = useNavigate();
   const { isValid, isSubmitting } = form.formState;
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
+
   const { userId } = useAuth();
 
   const title = inititalData

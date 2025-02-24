@@ -1,6 +1,9 @@
 import { Interview } from "@/types";
 import { Card, CardDescription, CardFooter, CardTitle } from "./ui/card";
 import { cn } from "@/lib/utils";
+import { TooltipButton } from "./tooltip-button";
+import { useNavigate } from "react-router-dom";
+import { Eye, Newspaper, Pencil, Sparkles } from "lucide-react";
 
 interface InterviewPinProps {
   interview: Interview;
@@ -21,7 +24,7 @@ export const InterviewPin = ({
   );
 
   const footerData = `${createdAtDate} - ${createdTime}`;
-
+  const navigate = useNavigate();
   return (
     <Card className="p-4 rounded-md shadow-none hover:shadow-md shadow-gray-100 cursor-pointer transition-all space-y-4">
       <CardTitle className="text-lg">{interview?.position}</CardTitle>
@@ -30,7 +33,7 @@ export const InterviewPin = ({
         {interview.techStack.split(",").map((word, index) => (
           <p
             key={index}
-            className="text-xs text-muted-foreground hover:border-gray-600 hover:text-gray-600 border rounded-xl p-1 ">
+            className="text-xs text-muted-foreground hover:border-gray-600 hover:text-gray-600 border rounded-xl px-2.5 py-0.5 ">
             {word}
           </p>
         ))}
@@ -43,6 +46,63 @@ export const InterviewPin = ({
         <p className="text-[12px] text-muted-foreground truncate whitespace-nowrap">
           {footerData}
         </p>
+        {!onMockPage && (
+          <div className="flex items-center justify-center">
+            <TooltipButton
+              content="Edit"
+              buttonVariant={"ghost"}
+              onClick={() => {
+                navigate(`/generate/${interview.id}`, { replace: true });
+              }}
+              disbaled={false}
+              buttonClassName="hover:text-red-500"
+              icon={<Pencil />}
+              loading={false}
+            />
+
+            <TooltipButton
+              content="View"
+              buttonVariant={"ghost"}
+              onClick={() => {
+                navigate(`/generate/${interview.id}}`, {
+                  replace: true,
+                });
+              }}
+              disbaled={false}
+              buttonClassName="hover:text-red-500"
+              icon={<Eye />}
+              loading={false}
+            />
+
+            <TooltipButton
+              content="Feedback"
+              buttonVariant={"ghost"}
+              onClick={() => {
+                navigate(`/generate/feedback/${interview.id}}`, {
+                  replace: true,
+                });
+              }}
+              disbaled={false}
+              buttonClassName="hover:text-red-500"
+              icon={<Newspaper />}
+              loading={false}
+            />
+
+            <TooltipButton
+              content="Start"
+              buttonVariant={"ghost"}
+              onClick={() => {
+                navigate(`/generate/interview/${interview.id}}`, {
+                  replace: true,
+                });
+              }}
+              disbaled={false}
+              buttonClassName="hover:text-red-500"
+              icon={<Sparkles />}
+              loading={false}
+            />
+          </div>
+        )}
       </CardFooter>
     </Card>
   );
