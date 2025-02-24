@@ -1,7 +1,9 @@
 import { Container } from "@/components/container";
+import { useAuth } from "@clerk/clerk-react";
 import { Link } from "react-router-dom";
 
 const HomePage = () => {
+  const { isSignedIn } = useAuth();
   return (
     <div className="flex-col w-full pb-24">
       <Container>
@@ -25,7 +27,7 @@ const HomePage = () => {
         </div>
 
         <div className="mt-6">
-          <Link to={"/generate"} className="w-full">
+          <Link to={isSignedIn ? "/generate" : "/signin"} className="w-full">
             <button className="px-6 py-3 text-white font-semibold text-lg rounded-2xl bg-gradient-to-r from-blue-500 to-purple-600 hover:opacity-90 transition">
               Get Started
             </button>
