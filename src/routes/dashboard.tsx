@@ -27,9 +27,9 @@ export const Dashboard = () => {
     const unsubscribe = onSnapshot(
       interviewQuery,
       (snapshot) => {
-        const interviewList: Interview[] = snapshot.docs.map((doc) =>
-          doc.data()
-        ) as Interview[];
+        const interviewList = snapshot.docs.map((doc) => {
+          return { ...doc.data(), id: doc.id };
+        }) as Interview[];
         setInterviews(interviewList);
         setIsLoading(false);
       },
@@ -92,7 +92,7 @@ export const Dashboard = () => {
               interviews
             </p>
 
-            <Link to={"/generate/create"} className="mt-4">
+            <Link to={"/create"} className="mt-4">
               <Button size={"sm"}>
                 <Plus className="min-w-5 min-h-5 mr-1" />
                 Add New

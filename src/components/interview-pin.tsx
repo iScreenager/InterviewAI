@@ -52,7 +52,7 @@ export const InterviewPin = ({
               content="Edit"
               buttonVariant={"ghost"}
               onClick={() => {
-                navigate(`/generate/${interview.id}`, { replace: true });
+                navigate(`/generate/edit/${interview.id}`);
               }}
               disbaled={false}
               buttonClassName="hover:text-red-500"
@@ -64,9 +64,7 @@ export const InterviewPin = ({
               content="View"
               buttonVariant={"ghost"}
               onClick={() => {
-                navigate(`/generate/${interview.id}}`, {
-                  replace: true,
-                });
+                navigate(`/generate/edit/${interview.id}`);
               }}
               disbaled={false}
               buttonClassName="hover:text-red-500"
@@ -78,7 +76,7 @@ export const InterviewPin = ({
               content="Feedback"
               buttonVariant={"ghost"}
               onClick={() => {
-                navigate(`/generate/feedback/${interview.id}}`, {
+                navigate(`/generate/feedback/${interview.id}`, {
                   replace: true,
                 });
               }}
@@ -92,7 +90,7 @@ export const InterviewPin = ({
               content="Start"
               buttonVariant={"ghost"}
               onClick={() => {
-                navigate(`/generate/interview/${interview.id}}`, {
+                navigate(`/generate/interview/${interview.id}`, {
                   replace: true,
                 });
               }}
