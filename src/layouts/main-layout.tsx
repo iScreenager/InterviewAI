@@ -7,10 +7,8 @@ export const MainLayout = () => {
   return (
     <div className="flex flex-col h-screen">
       <Header />
-      <Container>
-        <main className="flex-grow">
-          <Outlet />
-        </main>
+      <Container className="overflow-auto">
+        <Outlet />
       </Container>
       <Footer />
     </div>

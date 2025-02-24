@@ -15,7 +15,7 @@ const Header = () => {
         "w-full h-20 border-b duration-150 transition-all ease-in-out"
       )}>
       <Container>
-        <div className="flex items-center w-full justify-between">
+        <div className="flex items-center gap-4">
           <LogoContainer />
 
           <nav className="hidden md:flex items-center gap-3">
@@ -34,7 +34,7 @@ const Header = () => {
             )}
           </nav>
 
-          <div className=" flex items-center gap-4 justify-between">
+          <div className="ml-auto flex items-center gap-6">
             <ProfileContainer />
             <ToggleContainer />
           </div>

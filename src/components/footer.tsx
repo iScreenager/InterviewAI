@@ -1,12 +1,15 @@
 import { FaTwitter, FaLinkedin, FaGithub } from "react-icons/fa";
 import { Container } from "./container";
+import { LogoContainer } from "./logo-container";
 const Footer = () => {
   return (
-    <footer className="w-full py-2 absolute bottom-0 border-t">
-      <Container>
+    <footer className="w-full py-0 absolute bottom-0 border-t bg-white
+    ">
+      <Container className="py-3">
         <div className="flex flex-col md:flex-row items-center justify-between">
           <div className="text-center md:text-left">
-            <h2 className="text-2xl font-bold">InterviewAI</h2>
+            <LogoContainer />
+
             <p className=" text-sm">Your AI-powered interview partner.</p>
           </div>
 
