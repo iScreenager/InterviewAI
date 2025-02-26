@@ -1,14 +1,16 @@
 import { cn } from "@/lib/utils";
-import { useAuth } from "@clerk/clerk-react";
 import { Container } from "./container";
 import { LogoContainer } from "./logo-container";
 import { NavigationRoutes } from "./navigation-routes";
 import { NavLink } from "react-router-dom";
 import { ProfileContainer } from "./profile-container";
 import { ToggleContainer } from "./toggle-container";
+import { useContext } from "react";
+import { AuthContext } from "@/context/auth-context";
 
 const Header = () => {
-  const { userId } = useAuth();
+  const { user } = useContext(AuthContext);
+
   return (
     <header
       className={cn(
@@ -18,14 +20,14 @@ const Header = () => {
         <div className="flex items-center gap-4">
           <LogoContainer />
 
-          <nav className="hidden md:flex items-center gap-3">
+          <nav className="hidden md:flex items-center gap-3 ">
             <NavigationRoutes />
-            {userId && (
+            {user && (
               <NavLink
                 to={"/generate"}
                 className={({ isActive }) =>
                   cn(
-                    "text-base text-neutral-600",
+                    "text-base text-neutral-900 bg-violet-200 py-1 px-2 rounded-xl",
                     isActive && "text-neutral-900 font-semibold"
                   )
                 }>

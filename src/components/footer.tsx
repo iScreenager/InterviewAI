@@ -3,8 +3,7 @@ import { Container } from "./container";
 import { LogoContainer } from "./logo-container";
 const Footer = () => {
   return (
-    <footer className="w-full py-0 absolute bottom-0 border-t bg-white
-    ">
+    <footer className="w-full py-4 border-t bg-white relative">
       <Container className="py-3">
         <div className="flex flex-col md:flex-row items-center justify-between">
           <div className="text-center md:text-left">

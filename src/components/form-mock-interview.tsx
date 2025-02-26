@@ -3,8 +3,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Interview } from "@/types";
 import { CustomBreadCrumb } from "./custom-bread-crumb";
-import { useEffect, useState } from "react";
-import { useAuth } from "@clerk/clerk-react";
+import { useContext, useEffect, useState } from "react";
+
 import { Headings } from "./headings";
 import { Button } from "./ui/button";
 import { Loader, Trash2 } from "lucide-react";
@@ -30,6 +30,7 @@ import {
 } from "firebase/firestore";
 import { db } from "@/config/firebase.config";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "@/context/auth-context";
 
 interface FormMockInterviewProps {
   inititalData: Interview | null;
@@ -58,7 +59,8 @@ export const FormMockInterview = ({ inititalData }: FormMockInterviewProps) => {
   const { isValid, isSubmitting } = form.formState;
   const [isLoading, setIsLoading] = useState(false);
 
-  const { userId } = useAuth();
+  const { user } = useContext(AuthContext);
+  const userId = user?.uid || null;
 
   const title = inititalData
     ? inititalData.position
@@ -167,7 +169,7 @@ export const FormMockInterview = ({ inititalData }: FormMockInterviewProps) => {
   }, [inititalData, form]);
 
   return (
-    <div className="w-full mb-40 flex-col space-y-4">
+    <div className="w-full flex-col space-y-4">
       <CustomBreadCrumb
         breadCrumbPage={breadCrumbPage}
         breadCrumbItems={[{ label: "Mock Interviews", link: "/generate" }]}

@@ -1,10 +1,12 @@
 import { FieldValue, Timestamp } from "firebase/firestore";
 
 export interface User {
-  id: string;
-  name: string;
+  uid: string;
   email: string;
-  imageUrl: string;
+  emailVerified: boolean;
+  displayName: string;
+  isAnonymous: boolean;
+  photoURL: string;
   createdAt: Timestamp | FieldValue;
   updateAt: Timestamp | FieldValue;
 }

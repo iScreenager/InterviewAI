@@ -1,16 +1,17 @@
+import { AuthContext } from "@/context/auth-context";
 import { LoaderPage } from "@/routes/loader-page";
-import { useAuth } from "@clerk/clerk-react";
+import { useContext } from "react";
 import { Navigate } from "react-router-dom";
 
 const ProtectRoutes = ({ children }: { children: React.ReactNode }) => {
-  const { isLoaded, isSignedIn } = useAuth();
+  const { isLoading, user } = useContext(AuthContext);
 
-  if (!isLoaded) {
+  if (isLoading) {
     return <LoaderPage />;
   }
 
-  if (!isSignedIn) {
-    return <Navigate to={"/sigin"} replace />;
+  if (!user) {
+    return <Navigate to={"/signin"} replace />;
   }
 
   return children;

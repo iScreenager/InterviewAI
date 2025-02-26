@@ -13,7 +13,7 @@ import {
 import useSpeechToText, { ResultType } from "react-hook-speech-to-text";
 
 import { TooltipButton } from "@/components/tooltip-button";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { SaveModal } from "@/components/save-modal";
@@ -28,9 +28,10 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "@/config/firebase.config";
-import { useAuth } from "@clerk/clerk-react";
+
 import { useParams } from "react-router-dom";
 import { chatSession } from "@/scripts";
+import { AuthContext } from "@/context/auth-context";
 
 interface RecordAnswerProps {
   question: { question: string; answer: string };
@@ -65,7 +66,7 @@ export const RecordAnswer = ({
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const { userId } = useAuth();
+  const { user } = useContext(AuthContext);
   const { interviewId } = useParams();
 
   const recordUserAnswer = async () => {
@@ -160,7 +161,7 @@ export const RecordAnswer = ({
 
       const userAnswerQuery = query(
         collection(db, "userAnswers"),
-        where("userId", "==", userId),
+        where("userId", "==", user?.uid),
         where("question", "==", currentQuestion)
       );
 
@@ -183,7 +184,7 @@ export const RecordAnswer = ({
           user_ans: userAnswer,
           feedback: aiResult.feedback,
           rating: aiResult.ratings,
-          userId,
+          userId: user?.uid,
           createdAt: serverTimestamp(),
         });
 

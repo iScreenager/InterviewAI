@@ -1,15 +1,16 @@
 import Footer from "@/components/footer";
 import Header from "@/components/header";
-import { AuthHandler } from "@/handlers/auth-handler";
 
 import { Outlet } from "react-router-dom";
 
 export const PublicLayout = () => {
   return (
-    <div className="w-full h-svh">
-      <AuthHandler />
+    <div className="min-h-screen flex flex-col">
       <Header />
-      <Outlet />
+      <div className="flex-grow">
+        <Outlet />
+      </div>
+
       <Footer />
     </div>
   );

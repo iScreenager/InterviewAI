@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import {
@@ -9,7 +9,6 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import { useAuth } from "@clerk/clerk-react";
 
 import { CustomBreadCrumb } from "@/components/custom-bread-crumb";
 import { Headings } from "@/components/headings";
@@ -27,6 +26,7 @@ import { cn } from "@/lib/utils";
 import { CircleCheck, Star } from "lucide-react";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { LoaderPage } from "./loader-page";
+import { AuthContext } from "@/context/auth-context";
 
 export const Feedback = () => {
   const { interviewId } = useParams<{ interviewId: string }>();
@@ -34,7 +34,7 @@ export const Feedback = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [feedbacks, setFeedbacks] = useState<UserAnswer[]>([]);
   const [activeFeed, setActiveFeed] = useState("");
-  const { userId } = useAuth();
+  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
   if (!interviewId) {
@@ -67,7 +67,7 @@ export const Feedback = () => {
         try {
           const querSanpRef = query(
             collection(db, "userAnswers"),
-            where("userId", "==", userId),
+            where("userId", "==", user?.uid),
             where("mockIdRef", "==", interviewId)
           );
 
@@ -91,7 +91,7 @@ export const Feedback = () => {
       fetchInterview();
       fetchFeedbacks();
     }
-  }, [interviewId, navigate, userId]);
+  }, [interviewId, navigate, user?.uid]);
 
   //   calculate the ratings out of 10
 

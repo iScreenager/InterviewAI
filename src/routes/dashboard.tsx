@@ -1,27 +1,29 @@
 import { Headings } from "@/components/headings";
 import { InterviewPin } from "@/components/interview-pin";
+
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { db } from "@/config/firebase.config";
+import { AuthContext } from "@/context/auth-context";
 import { Interview } from "@/types";
-import { useAuth } from "@clerk/clerk-react";
+
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { Plus } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 
 export const Dashboard = () => {
   const [interviews, setInterviews] = useState<Interview[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const { userId } = useAuth();
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     setIsLoading(true);
     const interviewQuery = query(
       collection(db, "interviews"),
-      where("userId", "==", userId)
+      where("userId", "==", user?.uid)
     );
 
     const unsubscribe = onSnapshot(
@@ -42,14 +44,12 @@ export const Dashboard = () => {
       }
     );
 
-    //  clean up the listener when the component unmount
-
     return () => unsubscribe();
-  }, [userId]);
+  }, [user?.uid]);
 
   return (
     <>
-      {" "}
+      
       <div className="flex w-full items-center justify-between">
         <Headings
           title="Dashboard"
@@ -78,7 +78,7 @@ export const Dashboard = () => {
         ) : (
           <div className="md:col-span-3 w-full flex flex-grow items-center justify-center h-96 flex-col">
             <img
-              src="/public/assets/svg/not-found.svg"
+              src="/assets/svg/not-found.svg"
               className="w-44 h-44 object-contain"
               alt=""
             />

@@ -16,8 +16,8 @@ export const SaveModal = ({
 }: SaveModalProps) => {
   return (
     <Modal
-      title="Are you sure?"
-      description="This action cannot be undone you can't edit or re-answer this question again!"
+      title="Are you sure? You want to save!"
+      description="This action cannot be undone, you can't edit or re-answer this question again!"
       isOpen={isOpen}
       onClose={onClose}>
       <div className="pt-6 space-x-2 flex items-center justify-end w-full">

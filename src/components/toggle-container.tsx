@@ -9,10 +9,11 @@ import { Menu } from "lucide-react";
 import { NavigationRoutes } from "./navigation-routes";
 import { NavLink } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { useAuth } from "@clerk/clerk-react";
+import { useContext } from "react";
+import { AuthContext } from "@/context/auth-context";
 
 export const ToggleContainer = () => {
-  const { userId } = useAuth();
+  const { user } = useContext(AuthContext);
   return (
     <Sheet>
       <SheetTrigger className="block md:hidden">
@@ -23,9 +24,9 @@ export const ToggleContainer = () => {
           <SheetTitle />
         </SheetHeader>
 
-        <nav className="gap-3 flex flex-col items-start">
+        <nav className="gap-8 flex flex-col items-start">
           <NavigationRoutes isMobile />
-          {userId && (
+          {user && (
             <NavLink
               to={"/generate"}
               className={({ isActive }) =>
