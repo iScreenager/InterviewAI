@@ -49,14 +49,13 @@ export const Dashboard = () => {
 
   return (
     <>
-      
       <div className="flex w-full items-center justify-between">
         <Headings
           title="Dashboard"
           description="Create and start you AI Mock Interview"
         />
         <Link to={"/generate/create"}>
-          <Button size={"sm"}>
+          <Button size={"sm"} className="text-xs">
             <Plus /> Add New
           </Button>
         </Link>
@@ -92,7 +91,7 @@ export const Dashboard = () => {
               interviews
             </p>
 
-            <Link to={"/create"} className="mt-4">
+            <Link to={"/generate/create"} className="mt-4">
               <Button size={"sm"}>
                 <Plus className="min-w-5 min-h-5 mr-1" />
                 Add New

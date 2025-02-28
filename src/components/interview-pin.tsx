@@ -3,7 +3,7 @@ import { Card, CardDescription, CardFooter, CardTitle } from "./ui/card";
 import { cn } from "@/lib/utils";
 import { TooltipButton } from "./tooltip-button";
 import { useNavigate } from "react-router-dom";
-import { CircleArrowRight, Eye, Newspaper, Pencil } from "lucide-react";
+import { CircleArrowRight, Newspaper, Pencil } from "lucide-react";
 
 interface InterviewPinProps {
   interview: Interview;
@@ -57,18 +57,6 @@ export const InterviewPin = ({
               disbaled={false}
               buttonClassName="hover:text-red-500"
               icon={<Pencil />}
-              loading={false}
-            />
-
-            <TooltipButton
-              content="View"
-              buttonVariant={"ghost"}
-              onClick={() => {
-                navigate(`/generate/edit/${interview.id}`);
-              }}
-              disbaled={false}
-              buttonClassName="hover:text-red-500"
-              icon={<Eye />}
               loading={false}
             />
 

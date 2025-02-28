@@ -21,7 +21,7 @@ export const Headings = ({
         {title}
       </h2>
       {description && (
-        <p className="test-sm text-muted-foreground">{description}</p>
+        <p className="text-sm text-muted-foreground">{description}</p>
       )}
     </div>
   );

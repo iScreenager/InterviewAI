@@ -157,6 +157,15 @@ export const FormMockInterview = ({ inititalData }: FormMockInterviewProps) => {
     }
   };
 
+  const onReset = () => {
+    form.reset({
+      position: "",
+      description: "",
+      experience: 0,
+      techStack: "",
+    });
+  };
+
   useEffect(() => {
     if (inititalData) {
       form.reset({
@@ -189,7 +198,7 @@ export const FormMockInterview = ({ inititalData }: FormMockInterviewProps) => {
       <FormProvider {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="w-full p-8 rounded-lg flex-col flex items-start justify-start gap-6 shadow-md  ">
+          className="w-full p-8 rounded-lg flex-col flex items-start justify-start gap-10 shadow-md  ">
           <FormField
             control={form.control}
             name="position"
@@ -282,7 +291,8 @@ export const FormMockInterview = ({ inititalData }: FormMockInterviewProps) => {
               type="reset"
               size={"sm"}
               variant={"outline"}
-              disabled={isSubmitting || isLoading}>
+              disabled={isSubmitting || isLoading}
+              onClick={onReset}>
               Reset
             </Button>
             <Button

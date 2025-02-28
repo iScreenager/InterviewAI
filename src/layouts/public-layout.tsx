@@ -10,7 +10,6 @@ export const PublicLayout = () => {
       <div className="flex-grow">
         <Outlet />
       </div>
-
       <Footer />
     </div>
   );
