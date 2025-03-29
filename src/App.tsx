@@ -18,7 +18,7 @@ import { Feedback } from "./routes/feedback";
 import { useAuth } from "./hooks/useAuth";
 import { CommingSoon } from "./components/comming-soon";
 import { Guide } from "./components/guide";
-import { About } from "./components/About";
+import { AboutPage } from "./components/aboutPage";
 
 const App = () => {
   useAuth({ fetchOnLoad: true });
@@ -28,7 +28,7 @@ const App = () => {
         <Route element={<PublicLayout />}>
           <Route index path="/" element={<HomePage />} />
           <Route path="/guide" element={<Guide />} />
-          <Route path="/about" element={<About />} />
+          <Route path="/about" element={<AboutPage />} />
           <Route path="/Q&A" element={<CommingSoon />} />
           <Route path="/contact" element={<CommingSoon />} />
         </Route>

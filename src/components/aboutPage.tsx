@@ -1,7 +1,7 @@
 import { Target, Users, Zap } from "lucide-react";
 import { Container } from "./container";
 
-export const About = () => {
+export const AboutPage = () => {
   const aboutPoints = [
     {
       id: 1,
@@ -49,10 +49,13 @@ export const About = () => {
           ))}
         </div>
         <div className="bg-violet-50 text-center p-4">
-          <h1 className="mb-3 text-2xl font-medium text-gray-800">Our Vision</h1>
+          <h1 className="mb-3 text-2xl font-medium text-gray-800">
+            Our Vision
+          </h1>
           <p className="text-lg text-gray-600">
             "To create a world where every job seeker walks into their interview
-            with the confidence and <br/>preparation they need to succeed."
+            with the confidence and <br />
+            preparation they need to succeed."
           </p>
         </div>
       </Container>
