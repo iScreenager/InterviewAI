@@ -1,3 +1,4 @@
+
 import { About } from "@/components/About";
 import { Guide } from "@/components/guide";
 import { Hero } from "@/components/hero";
