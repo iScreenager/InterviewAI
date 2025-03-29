@@ -94,17 +94,16 @@ export const RecordAnswer = ({
   };
 
   const cleanJsonResponse = (responseText: string) => {
-    // Step 1: Trim any surrounding whitespace
     let cleanText = responseText.trim();
 
-    // Step 2: Remove any occurrences of "json" or code block symbols (``` or `)
-    cleanText = cleanText.replace(/(json|```|`)/g, "");
+    cleanText = cleanText.replace(/(```|`|json)/g, "");
 
-    // Step 3: Parse the clean JSON text into an array of objects
+    cleanText = cleanText.replace(/[\r\n\t]/g, " ");
+
     try {
       return JSON.parse(cleanText);
     } catch (error) {
-      throw new Error("Invalid JSON format: " + (error as Error)?.message);
+      throw new Error("Invalid JSON format: " + (error as Error).message);
     }
   };
 
@@ -125,10 +124,11 @@ export const RecordAnswer = ({
 
     try {
       const aiResult = await chatSession.sendMessage(prompt);
-
+      console.log("result" + aiResult);
       const parsedResult: AIResponse = cleanJsonResponse(
         aiResult.response.text()
       );
+      console.log("after" + parsedResult);
       return parsedResult;
     } catch (error) {
       console.log(error);

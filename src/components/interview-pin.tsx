@@ -26,7 +26,7 @@ export const InterviewPin = ({
   const footerData = `${createdAtDate} - ${createdTime}`;
   const navigate = useNavigate();
   return (
-    <Card className="p-4 rounded-md shadow-none hover:shadow-md shadow-gray-100 cursor-pointer transition-all space-y-4">
+    <Card className="p-4 rounded-md shadow-ld hover:shadow-ld shadow-gray-400 hover:shadow-gray-400 cursor-pointer transition-all space-y-4">
       <CardTitle className="text-lg">{interview?.position}</CardTitle>
       <CardDescription>{interview?.description}</CardDescription>
       <div className="w-full flex items-center gap-2 flex-wrap">

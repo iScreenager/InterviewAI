@@ -20,10 +20,14 @@ const Footer = () => {
             <a href="#" className=" hover:text-gray-600  transition text-xl">
               <FaTwitter />
             </a>
-            <a href="#" className=" hover:text-gray-600 transition text-xl">
+            <a
+              href="https://www.linkedin.com/in/vaishnavi-rastogi-104501194/"
+              className=" hover:text-gray-600 transition text-xl">
               <FaLinkedin />
             </a>
-            <a href="#" className=" hover:text-gray-600 transition text-xl">
+            <a
+              href="https://github.com/iScreenager"
+              className=" hover:text-gray-600 transition text-xl">
               <FaGithub />
             </a>
           </div>
