@@ -26,7 +26,7 @@ export const LogoutModal = ({
           Cancel
         </Button>
         <Button
-          className="bg-emerald-600 hover:bg-emerald-800"
+          className="bg-violet-500 hover:bg-violet-800"
           onClick={onConfirm}>
           {isLoading ? (
             <Loader className="text-gray-50 animate-spin" />

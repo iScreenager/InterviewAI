@@ -1,7 +1,7 @@
 export const MainRoutes = [
   {
     label: "Home",
-    href: "/",
+    href: "/", // Change this to "/Home"
   },
   {
     label: "Guide",
@@ -12,12 +12,7 @@ export const MainRoutes = [
     href: "/#about",
   },
   {
-    label: "FAQ",
-    href: "/Q&A",
-  },
-
-  {
     label: "Contact Us",
-    href: "/contact",
+    href: "/#contact",
   },
 ];

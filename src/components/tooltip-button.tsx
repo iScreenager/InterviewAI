@@ -44,18 +44,20 @@ export const TooltipButton = ({
       <Tooltip>
         <TooltipTrigger
           className={disbaled ? "cursor-not-allowed" : "cursor-pointer"}>
-          <Button
-            size={"icon"}
-            disabled={disbaled}
-            variant={buttonVariant}
-            className={buttonClassName}
-            onClick={onClick}>
-            {loading ? (
-              <Loader className="min-w-4 min-h-4 animate-spin text-emerald-400" />
-            ) : (
-              icon
-            )}
-          </Button>
+          <span>
+            <Button
+              size={"icon"}
+              disabled={disbaled}
+              variant={buttonVariant}
+              className={buttonClassName}
+              onClick={onClick}>
+              {loading ? (
+                <Loader className="min-w-4 min-h-4 animate-spin text-emerald-400" />
+              ) : (
+                icon
+              )}
+            </Button>
+          </span>
         </TooltipTrigger>
         <TooltipContent>
           <p>{loading ? "Loading..." : content}</p>

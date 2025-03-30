@@ -7,7 +7,7 @@ export const PublicLayout = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <div className="flex-grow">
+      <div className="flex-grow mt-20">
         <Outlet />
       </div>
       <Footer />

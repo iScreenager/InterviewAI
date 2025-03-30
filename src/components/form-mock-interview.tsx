@@ -24,6 +24,7 @@ import { chatSession } from "@/scripts";
 import {
   addDoc,
   collection,
+  deleteDoc,
   doc,
   serverTimestamp,
   updateDoc,
@@ -166,6 +167,26 @@ export const FormMockInterview = ({ inititalData }: FormMockInterviewProps) => {
     });
   };
 
+  const handleDelete = async () => {
+    if (!inititalData?.id) return;
+
+    try {
+      setIsLoading(true);
+      await deleteDoc(doc(db, "interviews", inititalData.id));
+      toast("Deleted!", {
+        description: "Mock Interview removed successfully.",
+      });
+      navigate("/generate", { replace: true });
+    } catch (error) {
+      console.log(error);
+      toast.error("Error!", {
+        description: "Failed to delete. Try again later.",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (inititalData) {
       form.reset({
@@ -187,7 +208,11 @@ export const FormMockInterview = ({ inititalData }: FormMockInterviewProps) => {
       <div className="mt-4 flex items-center justify-between w-full ">
         <Headings title={title} isSubHeading />
         {inititalData && (
-          <Button size={"icon"} variant={"ghost"}>
+          <Button
+            size={"icon"}
+            variant={"ghost"}
+            onClick={handleDelete}
+            disabled={isLoading}>
             <Trash2 className="min-w-4 min-h-4 text-red-500" />
           </Button>
         )}

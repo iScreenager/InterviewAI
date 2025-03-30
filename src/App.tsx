@@ -16,9 +16,9 @@ import { MockLoadPage } from "./routes/mock-load-page";
 import { MockInterviewPage } from "./routes/mock-interview-page";
 import { Feedback } from "./routes/feedback";
 import { useAuth } from "./hooks/useAuth";
-import { CommingSoon } from "./components/comming-soon";
 import { Guide } from "./components/guide";
 import { AboutPage } from "./components/aboutPage";
+import { ContactPage } from "./components/contactPage";
 
 const App = () => {
   useAuth({ fetchOnLoad: true });
@@ -29,8 +29,7 @@ const App = () => {
           <Route index path="/" element={<HomePage />} />
           <Route path="/guide" element={<Guide />} />
           <Route path="/about" element={<AboutPage />} />
-          <Route path="/Q&A" element={<CommingSoon />} />
-          <Route path="/contact" element={<CommingSoon />} />
+          <Route path="/contact" element={<ContactPage />} />
         </Route>
 
         <Route element={<AuthenticationLayout />}>

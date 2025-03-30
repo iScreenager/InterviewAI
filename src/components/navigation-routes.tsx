@@ -15,11 +15,19 @@ export const NavigationRoutes = ({
   const location = useLocation();
 
   const handleNavigation = (href: string) => {
+    if (href === "/") {
+      setActiveSection(null); // Clear active section
+      navigate("/");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
     if (href.startsWith("/#")) {
-      const sectionId = href.replace("/#", ""); // Extract section ID
+      const sectionId = href.replace("/#", "");
+      setActiveSection(sectionId);
 
       if (location.pathname !== "/") {
-        navigate("/"); // Navigate to home first
+        navigate("/");
         setTimeout(() => {
           document
             .getElementById(sectionId)
@@ -30,8 +38,6 @@ export const NavigationRoutes = ({
           .getElementById(sectionId)
           ?.scrollIntoView({ behavior: "smooth" });
       }
-
-      setActiveSection(sectionId); // Update active section
     } else {
       navigate(href);
       setActiveSection(null);

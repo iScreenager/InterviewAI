@@ -14,7 +14,7 @@ const Header = () => {
   return (
     <header
       className={cn(
-        "w-full h-20 border-b duration-150 transition-all ease-in-out"
+        "w-full h-20 border-b fixed top-0 left-0 z-50 bg-white shadow-md "
       )}>
       <Container>
         <div className="flex items-center gap-4">
