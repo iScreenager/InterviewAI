@@ -70,68 +70,90 @@ export function SignUpForm({
     }
   };
 
+  
   return (
-    <form
-      className={cn("flex flex-col gap-6", className)}
-      {...props}
-      onSubmit={handleSign}>
-      <div className="flex flex-col items-center gap-2 text-center">
-        <h1 className="text-2xl font-bold">Create your account</h1>
-        <p className="text-balance text-sm text-muted-foreground">
-          Enter your email below to create your account
-        </p>
-      </div>
-      <div className="grid gap-6">
-        <div className="grid gap-2">
-          <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            type="email"
-            placeholder="qwerty123@example.com"
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+    <div className="rounded-lg bg-gray-200 shadow-2xl bg-opacity-40 p-5">
+      <form
+        className={cn("flex flex-col gap-6", className)}
+        {...props}
+        onSubmit={handleSign}>
+        <div className="flex flex-col items-center gap-2 text-center">
+          <h1 className="text-2xl font-bold">Create your account</h1>
+          <p className="text-balance text-sm text-muted-foreground">
+            Practice like it's real. Perform like a pro.
+          </p>
         </div>
-        <div className="grid gap-2">
-          <div className="flex items-center">
-            <Label htmlFor="password">Password</Label>
+        <div className="grid gap-6">
+          <div className="grid gap-2">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="qwerty123@example.com"
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className="grid gap-2">
+            <div className="flex items-center">
+              <Label htmlFor="password">Password</Label>
+            </div>
+            <Input
+              id="password"
+              type="password"
+              placeholder="password"
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
             <a
               href="#"
-              className="ml-auto text-sm underline-offset-4 hover:underline">
+              className="ml-auto text-sm underline-offset-4 hover:underline text-blue-500">
               Forgot your password?
             </a>
           </div>
-          <Input
-            id="password"
-            type="password"
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+          <Button
+            type="submit"
+            className="w-full bg-gradient-to-r from-blue-500 to-purple-600">
+            Create
+          </Button>
+          <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
+            <span className="relative z-10 bg-gray-100 px-5 text-muted-foreground">
+              or
+            </span>
+          </div>
+          <Button onClick={googleSign} variant="outline" className="w-full">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              x="0px"
+              y="0px"
+              width="100"
+              height="100"
+              viewBox="0 0 48 48">
+              <path
+                fill="#FFC107"
+                d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"></path>
+              <path
+                fill="#FF3D00"
+                d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"></path>
+              <path
+                fill="#4CAF50"
+                d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"></path>
+              <path
+                fill="#1976D2"
+                d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"></path>
+            </svg>
+            SignUp with Google
+          </Button>
         </div>
-        <Button type="submit" className="w-full">
-          Create
-        </Button>
-        <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
-          <span className="relative z-10 bg-background px-2 text-muted-foreground">
-            Or
-          </span>
+        <div className="text-center text-sm">
+          Already have an account?{" "}
+          <a
+            href="/signin"
+            className="underline underline-offset-4 text-blue-500">
+            Login
+          </a>
         </div>
-        <Button onClick={googleSign} variant="outline" className="w-full">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <path
-              d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"
-              fill="currentColor"
-            />
-          </svg>
-          SignUp with Google
-        </Button>
-      </div>
-      <div className="text-center text-sm">
-        Already have an account?{" "}
-        <a href="/signin" className="underline underline-offset-4">
-          Sign in
-        </a>
-      </div>
-    </form>
+      </form>
+    </div>
   );
 }

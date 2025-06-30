@@ -1,7 +1,7 @@
 export const MainRoutes = [
   {
     label: "Home",
-    href: "/", // Change this to "/Home"
+    href: "/", 
   },
   {
     label: "Guide",
