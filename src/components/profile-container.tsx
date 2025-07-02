@@ -18,6 +18,7 @@ export const ProfileContainer = () => {
     try {
       await signOut(auth);
       localStorage.removeItem("userData");
+      auth.signOut();
       setUser(null);
       navigate("/");
     } catch (error) {

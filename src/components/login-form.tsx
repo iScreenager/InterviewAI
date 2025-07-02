@@ -73,7 +73,7 @@ export function LoginForm({
     try {
       const result = await signInAnonymously(auth);
       if (result.user) {
-        localStorage.setItem("userData", JSON.stringify(result.user));
+        sessionStorage.setItem("userData", JSON.stringify(result.user));
         setUser(JSON.parse(JSON.stringify(result.user)));
         navigate("/");
       }
@@ -137,7 +137,7 @@ export function LoginForm({
               or
             </span>
           </div>
-          <Button onClick={googleSign} variant="outline" className="w-full">
+          <Button type="button" onClick={googleSign} variant="outline" className="w-full">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               x="0px"
@@ -160,7 +160,7 @@ export function LoginForm({
             </svg>
             Login with Google
           </Button>
-          <Button onClick={guestSign} variant="outline" className="w-full">
+          <Button type="button" onClick={guestSign} variant="outline" className="w-full">
             Login as Guest
           </Button>
         </div>

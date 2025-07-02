@@ -11,7 +11,10 @@ export const useAuth = ({
 
   const fetchUser = useCallback(() => {
     try {
-      const myData = localStorage.getItem("userData") ?? "";
+      const myData =
+        localStorage.getItem("userData") ??
+        sessionStorage.getItem("userData") ??
+        "";
 
       if (myData) {
         const result: User = JSON.parse(myData);
