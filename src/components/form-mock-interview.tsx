@@ -2,7 +2,6 @@ import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Interview } from "@/types";
-import { CustomBreadCrumb } from "./custom-bread-crumb";
 import { useContext, useEffect, useState } from "react";
 
 import { Headings } from "./headings";
@@ -33,6 +32,7 @@ import { db } from "@/config/firebase.config";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "@/context/auth-context";
 
+
 interface FormMockInterviewProps {
   inititalData: Interview | null;
 }
@@ -59,6 +59,7 @@ export const FormMockInterview = ({ inititalData }: FormMockInterviewProps) => {
   const navigate = useNavigate();
   const { isValid, isSubmitting } = form.formState;
   const [isLoading, setIsLoading] = useState(false);
+  
 
   const { user } = useContext(AuthContext);
   const userId = user?.uid || null;
@@ -67,7 +68,7 @@ export const FormMockInterview = ({ inititalData }: FormMockInterviewProps) => {
     ? inititalData.position
     : "Create a new mock interview";
 
-  const breadCrumbPage = inititalData ? inititalData?.position : "Create";
+  
 
   const actions = inititalData ? "Save Changes" : "Create";
 
@@ -187,6 +188,7 @@ export const FormMockInterview = ({ inititalData }: FormMockInterviewProps) => {
     }
   };
 
+
   useEffect(() => {
     if (inititalData) {
       form.reset({
@@ -200,11 +202,6 @@ export const FormMockInterview = ({ inititalData }: FormMockInterviewProps) => {
 
   return (
     <div className="w-full flex-col space-y-4">
-      <CustomBreadCrumb
-        breadCrumbPage={breadCrumbPage}
-        breadCrumbItems={[{ label: "Mock Interviews", link: "/generate" }]}
-      />
-
       <div className="mt-4 flex items-center justify-between w-full ">
         <Headings title={title} isSubHeading />
         {inititalData && (
@@ -299,14 +296,22 @@ export const FormMockInterview = ({ inititalData }: FormMockInterviewProps) => {
                   <FormMessage className="text-sm" />
                 </div>
                 <FormControl>
-                  <Textarea
+                  <Input
                     className="h-12"
                     disabled={isLoading}
-                    placeholder="eg:- React, Typescript... (seapare the values using comma"
+                    placeholder="Type tech stack here"
                     {...field}
                     value={field.value || ""}
+                    
                   />
                 </FormControl>
+                <div className="flex gap-3">
+                  {(field.value || "").split(",").map((stack,indx) => (
+                    <div key={indx} className="border p-2 rounded-md">{stack}
+                      <span> X</span>
+                    </div>
+                  ))}
+                </div>
               </FormItem>
             )}
           />

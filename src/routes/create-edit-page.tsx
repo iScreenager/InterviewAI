@@ -1,18 +1,18 @@
-import { FormMockInterview } from "@/components/form-mock-interview";
 import { db } from "@/config/firebase.config";
 import { Interview } from "@/types";
 import { doc, getDoc } from "firebase/firestore";
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { LoaderPage } from "./loader-page";
+import { CreateMockup } from "@/components/create-mock-up";
 
-export const CreateEditPage = () => {
+const CreateEditPage = () => {
   const { interviewId } = useParams<{ interviewId: string }>();
   const [interview, setInterview] = useState<Interview | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchInterview = useCallback(async () => {
-    if (interviewId) {
+    if (interviewId && interview) {
       try {
         setIsLoading(true);
         const interviewDoc = await getDoc(doc(db, "interviews", interviewId));
@@ -38,5 +38,10 @@ export const CreateEditPage = () => {
     return <LoaderPage className="w-full h-[70vh]" />;
   }
 
-  return <FormMockInterview inititalData={interview} />;
+  return (
+    <div className="flex justify-center w-full ">
+      <CreateMockup />
+    </div>
+  );
 };
+export default CreateEditPage;

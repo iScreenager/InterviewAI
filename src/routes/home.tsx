@@ -1,7 +1,6 @@
-// import { About } from "@/components/about";
-import { AboutPage } from "@/components/aboutPage";
-import { ContactPage } from "@/components/contactPage";
-import { Guide } from "@/components/guide";
+
+import  AboutPage  from "@/components/aboutPage";
+import  Guide  from "@/components/guide";
 import { Hero } from "@/components/hero";
 
 const HomePage = () => {
@@ -10,7 +9,7 @@ const HomePage = () => {
       <Hero />
       <Guide />
       <AboutPage />
-      <ContactPage />
+     
     </div>
   );
 };

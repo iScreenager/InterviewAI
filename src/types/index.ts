@@ -1,4 +1,5 @@
 import { FieldValue, Timestamp } from "firebase/firestore";
+import { LucideIcon } from "lucide-react";
 
 export interface User {
   uid: string;
@@ -34,4 +35,24 @@ export interface UserAnswer {
   userId: string;
   createdAt: Timestamp;
   updateAt: Timestamp;
+}
+
+export interface CategoryItem {
+  stack: string;
+  select: boolean;
+}
+
+export interface Category {
+  key: string;
+  title: string;
+  heading?: string,
+  description?: string,
+  icon?: LucideIcon;
+  default: CategoryItem[];
+}
+
+export interface AllselectedItemsState {
+   techStacks: string[];
+  role: string;
+  experience: string;
 }

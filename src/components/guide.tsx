@@ -9,7 +9,7 @@ interface GuideStep {
   image: string;
 }
 
-export const Guide = () => {
+ const Guide = () => {
   const [selectedCard, setSelectedCard] = useState<number | null>(1);
   const [onHover, setOnHover] = useState<number | null>(null);
 
@@ -116,3 +116,5 @@ export const Guide = () => {
     </div>
   );
 };
+
+export default Guide;

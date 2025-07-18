@@ -26,7 +26,7 @@ export const Hero = () => {
             <div className="mt-6">
               <Link to={user ? "/generate/create" : "/signin"}>
                 <Button className="px-6 py-3 text-white font-semibold text-lg rounded-2xl bg-gradient-to-r from-blue-500 to-purple-600 hover:opacity-90 transition">
-                  Create a mockup <FaArrowRight />
+                  Start Free Interview <FaArrowRight />
                 </Button>
               </Link>
             </div>

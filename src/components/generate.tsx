@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 
-export const Generate = () => {
+ const Generate = () => {
   return (
     <div className=" md:px-12 min-h-screen flex flex-col">
       <div className="flex-grow">
@@ -9,3 +9,4 @@ export const Generate = () => {
     </div>
   );
 };
+export default Generate;

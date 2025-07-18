@@ -15,7 +15,7 @@ import { Interview } from "@/types";
 import { LoaderPage } from "./loader-page";
 import { CustomBreadCrumb } from "@/components/custom-bread-crumb";
 
-export const MockLoadPage = () => {
+ const MockLoadPage = () => {
   const { interviewId } = useParams<{ interviewId: string }>();
   const [interview, setInterview] = useState<Interview | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -113,4 +113,6 @@ export const MockLoadPage = () => {
       </div>
     </div>
   );
-};
+ };
+
+export default MockLoadPage;

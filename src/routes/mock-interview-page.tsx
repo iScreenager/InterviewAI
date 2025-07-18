@@ -13,7 +13,7 @@ import { Interview } from "@/types";
 import { LoaderPage } from "./loader-page";
 import { QuestionSection } from "@/components/question-section";
 
-export const MockInterviewPage = () => {
+ const MockInterviewPage = () => {
   const { interviewId } = useParams<{ interviewId: string }>();
   const [interview, setInterview] = useState<Interview | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -95,3 +95,4 @@ export const MockInterviewPage = () => {
     </div>
   );
 };
+export default MockInterviewPage;

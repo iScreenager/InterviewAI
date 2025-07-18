@@ -14,7 +14,7 @@ import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 
-export const Dashboard = () => {
+ const Dashboard = () => {
   const [interviews, setInterviews] = useState<Interview[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { user } = useContext(AuthContext);
@@ -103,3 +103,4 @@ export const Dashboard = () => {
     </>
   );
 };
+export default Dashboard;

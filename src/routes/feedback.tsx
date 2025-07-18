@@ -28,7 +28,7 @@ import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { LoaderPage } from "./loader-page";
 import { AuthContext } from "@/context/auth-context";
 
-export const Feedback = () => {
+ const Feedback = () => {
   const { interviewId } = useParams<{ interviewId: string }>();
   const [interview, setInterview] = useState<Interview | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -205,3 +205,5 @@ export const Feedback = () => {
     </div>
   );
 };
+
+export default Feedback;
