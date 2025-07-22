@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import {
+ 
   experienceCategories,
   roleCategories,
   techCategories,
@@ -17,6 +18,7 @@ export const CreateMockup = () => {
   const [roles, setRoles] = useState<Category[]>(roleCategories);
   const [experience, setExperience] =
     useState<Category[]>(experienceCategories);
+  
 
   const [allselectedItems, setAllSelectedItems] =
     useState<AllselectedItemsState>({
@@ -50,17 +52,23 @@ export const CreateMockup = () => {
         </p>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
+      <Tabs aria-disabled value={activeTab} onValueChange={setActiveTab}>
         <TabsList>
-          <TabsTrigger value="TechStack">
+          <TabsTrigger
+            className="pointer-events-none cursor-not-allowed"
+            value="TechStack">
             <span className="block lg:hidden">1</span>
             <span className="hidden lg:block">1. Tech Stack</span>
           </TabsTrigger>
-          <TabsTrigger value="Role">
+          <TabsTrigger
+            className="pointer-events-none cursor-not-allowed"
+            value="Role">
             <span className="block lg:hidden">2</span>
             <span className="hidden lg:block">2. Role</span>
           </TabsTrigger>
-          <TabsTrigger value="Details">
+          <TabsTrigger
+            className="pointer-events-none cursor-not-allowed"
+            value="Details">
             <span className="block lg:hidden">3</span>
             <span className="hidden lg:block">3. Details</span>
           </TabsTrigger>
@@ -101,7 +109,6 @@ export const CreateMockup = () => {
           <DetailsTabContent
             allselectedItems={allselectedItems}
             goToBackTab={goToBackTab}
-            
           />
         </TabsContent>
       </Tabs>

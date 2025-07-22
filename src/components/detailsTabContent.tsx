@@ -171,18 +171,25 @@ Return only the JSON array. Do not include any explanations, markdown, or extra 
           className="rounded-full bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 flex items-center gap-2 text-sm shadow-md"
           onClick={goToBackTab}>
           <ChevronLeft className="w-4 h-4" />
-          Back
+          <span className="hidden sm:inline">Back</span>
         </Button>
         <Button
           className="rounded-full bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 flex items-center gap-2 text-sm shadow-md"
           onClick={handleSubmit}
-          disabled={isLoading || allselectedItems.techStacks.length === 0 || allselectedItems.role === "" || allselectedItems.experience === ""}>
+          disabled={
+            isLoading ||
+            allselectedItems.techStacks.length === 0 ||
+            allselectedItems.role === "" ||
+            allselectedItems.experience === ""
+          }>
           {isLoading ? (
             <Loader className="text-gray-50 animate-spin" />
           ) : (
             <>
               Create Interview
-              <ChevronRight className="w-4 h-4" />
+              <span className="hidden sm:inline">
+                <ChevronRight className="w-4 h-4" />
+              </span>
             </>
           )}
         </Button>

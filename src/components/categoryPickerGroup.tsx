@@ -175,7 +175,7 @@ export const CategoryPickerGroup = ({
             className="rounded-full bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 flex items-center gap-2 text-sm shadow-md"
             onClick={goToBackTab}>
             <ChevronLeft className="w-4 h-4" />
-            Back
+            <span className="hidden sm:inline">Back</span>
           </Button>
           <Button
             className="rounded-full bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 flex items-center gap-2 text-sm shadow-md"
@@ -187,7 +187,8 @@ export const CategoryPickerGroup = ({
                 (allselectedItems.role === "" ||
                   allselectedItems.experience === ""))
             }>
-            Next
+         
+            <span className="hidden sm:inline"> Next</span>
             <ChevronRight className="w-4 h-4" />
           </Button>
         </div>
