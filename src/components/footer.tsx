@@ -6,7 +6,7 @@ const Footer = () => {
   return (
     <footer className="w-full  border-t bg-white">
       <Container className="flex flex-wrap items-center justify-center md:justify-between text-center md:text-left gap-4">
-        {/* Logo & Tagline */}
+        
         <div className="flex flex-col items-center md:items-start">
           <LogoContainer />
           <p className="text-sm text-gray-600">
@@ -14,12 +14,12 @@ const Footer = () => {
           </p>
         </div>
 
-        {/* Copyright */}
+       
         <div className="text-sm text-gray-600">
           © {new Date().getFullYear()} InterviewAI. All rights reserved.
         </div>
 
-        {/* Social Links */}
+       
         <div className="flex space-x-4">
           <a href="#" className="hover:text-gray-600 transition text-xl">
             <FaTwitter />

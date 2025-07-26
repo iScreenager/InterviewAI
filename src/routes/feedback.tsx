@@ -38,7 +38,6 @@ const Feedback = () => {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  // Animated progress state
   const [percentage, setPercentage] = useState(0);
 
   if (!interviewId) {
@@ -84,7 +83,6 @@ const Feedback = () => {
 
     const score = interview.overallFeedback.overallScore ?? 0;
     const target = Math.min(score, 100);
-
     let start = 0;
     const duration = 800;
     const stepTime = 10;
@@ -103,9 +101,7 @@ const Feedback = () => {
     return () => clearInterval(interval);
   }, [interview]);
 
-  if (isLoading) {
-    return <LoaderPage className="w-full h-[70vh]" />;
-  }
+  if (isLoading) return <LoaderPage className="w-full h-[70vh]" />;
 
   return (
     <div className="flex flex-col w-full gap-8 py-6 px-4 sm:px-8 max-w-7xl mx-auto">
@@ -120,7 +116,6 @@ const Feedback = () => {
 
       {interview?.overallFeedback && (
         <div className="my-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {/* Overall Score */}
           <Card className="bg-white border rounded-xl p-6 flex flex-col items-center shadow-md h-full">
             <h6 className="text-sm font-medium text-gray-600 mb-2">
               Overall Score
@@ -146,7 +141,6 @@ const Feedback = () => {
             </div>
           </Card>
 
-          {/* Strengths */}
           <Card className="bg-white border rounded-xl shadow-md p-6 flex flex-col h-full">
             <CardTitle className="flex items-center font-semibold text-lg mb-2">
               <ThumbsUp className="mr-2 text-green-500" />
@@ -166,7 +160,6 @@ const Feedback = () => {
             </CardDescription>
           </Card>
 
-          {/* Improvements */}
           <Card className="bg-white border rounded-xl shadow-md p-6 flex flex-col h-full">
             <CardTitle className="flex items-center font-semibold text-lg mb-2">
               <ThumbsDown className="mr-2 text-orange-400" />
@@ -190,7 +183,6 @@ const Feedback = () => {
 
       <Headings title="Interview Feedback" isSubHeading />
 
-      {/* Accordion Section */}
       {interview && (
         <Accordion type="multiple" className="space-y-6">
           {interview.questions.map((feed, index) => (
@@ -198,10 +190,10 @@ const Feedback = () => {
               key={index}
               value={feed.question}
               className="border rounded-xl overflow-hidden shadow transition duration-300 ease-in-out">
-              {/* AccordionTrigger */}
               <AccordionTrigger
                 onClick={() => setActiveFeed(feed.question)}
                 className={cn(
+                  "no-underline hover:no-underline",
                   "flex flex-wrap sm:flex-nowrap items-center justify-between px-5 py-4 bg-gradient-to-r from-white to-gray-50",
                   "hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-100 transition-all",
                   activeFeed === feed.question
@@ -209,23 +201,42 @@ const Feedback = () => {
                     : ""
                 )}>
                 <div className="flex flex-col sm:flex-row sm:items-center sm:gap-4 flex-1 min-w-0">
-                  <span className="text-gray-900 font-semibold text-sm sm:text-base whitespace-nowrap">
-                    Question {index + 1}:
-                  </span>
-                  <span className="text-gray-600 break-words text-sm sm:text-base mt-1 sm:mt-0 min-w-0 flex-1">
+                  <div className="flex items-center gap-2 justify-between">
+                    <span className="text-gray-900 font-semibold text-sm sm:text-base whitespace-nowrap">
+                      Question {index + 1}
+                    </span>
+                   
+                    <span className="text-green-600 font-semibold sm:hidden flex items-center gap-1 text-sm no-underline">
+                      <Award className="w-4 h-4" />
+                      {feed.rating}%
+                    </span>
+                  </div>
+
+                 
+                  <span className="hidden sm:inline text-gray-600 text-sm sm:text-base break-words flex-1 md:block">
                     {feed.question}
                   </span>
                 </div>
 
-                <span className="flex items-center gap-1 text-green-600 font-semibold min-w-[60px] justify-end mt-2 sm:mt-0">
+                <span className="hidden sm:flex items-center gap-1 text-green-600 font-semibold min-w-[60px] justify-end mt-2 sm:mt-0">
                   <Award className="w-4 h-4 flex-shrink-0" />
                   {feed.rating}%
                 </span>
               </AccordionTrigger>
 
-              {/* AccordionContent */}
               <AccordionContent className="bg-white px-5 py-6 space-y-6 transition-all duration-300 ease-in-out">
-                {/* Expected Answer */}
+               
+                <Card className="p-4 bg-gray-50 border-l-4 border-gray-400 rounded-lg shadow mb-4 block md:hidden">
+                  <CardTitle className="flex items-center text-sm sm:text-base mb-1">
+                    <CircleCheck className="mr-2 text-gray-600" />
+                    Question
+                  </CardTitle>
+                  <CardDescription className="text-gray-700 text-sm leading-relaxed">
+                    {feed.question}
+                  </CardDescription>
+                </Card>
+
+               
                 <Card className="p-4 bg-green-50 border-l-4 border-green-500 rounded-lg shadow">
                   <CardTitle className="flex items-center text-sm sm:text-base mb-1">
                     <CircleCheck className="mr-2 text-green-600" />
@@ -236,7 +247,6 @@ const Feedback = () => {
                   </CardDescription>
                 </Card>
 
-                {/* Your Answer */}
                 <Card className="p-4 bg-blue-50 border-l-4 border-blue-500 rounded-lg shadow">
                   <CardTitle className="flex items-center text-sm sm:text-base mb-1">
                     <CircleCheck className="mr-2 text-blue-600" />
@@ -247,7 +257,6 @@ const Feedback = () => {
                   </CardDescription>
                 </Card>
 
-                {/* Feedback */}
                 <Card className="p-4 bg-red-50 border-l-4 border-red-500 rounded-lg shadow">
                   <CardTitle className="flex items-center text-sm sm:text-base mb-1">
                     <CircleCheck className="mr-2 text-red-600" />
