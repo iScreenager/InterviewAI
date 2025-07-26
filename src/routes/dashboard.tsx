@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import { ConfirmActionModal } from "@/components/confirmActionModal";
 import { Headings } from "@/components/headings";
 import { InterviewPin } from "@/components/interview-pin";
 
@@ -8,43 +10,80 @@ import { db } from "@/config/firebase.config";
 import { AuthContext } from "@/context/auth-context";
 import { Interview } from "@/types";
 
-import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
 import { Plus } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 
- const Dashboard = () => {
+const Dashboard = () => {
   const [interviews, setInterviews] = useState<Interview[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+  const [deleteInterviewId, setDeleteInterviewId] = useState<string | null>(
+    null
+  );
+  
+
   const { user } = useContext(AuthContext);
 
-  useEffect(() => {
+  const getInterviews = async () => {
+    if (!user?.uid) {
+      toast.error("User not logged in. Please login again.");
+      return;
+    }
+
     setIsLoading(true);
-    const interviewQuery = query(
-      collection(db, "interviews"),
-      where("userId", "==", user?.uid)
-    );
 
-    const unsubscribe = onSnapshot(
-      interviewQuery,
-      (snapshot) => {
-        const interviewList = snapshot.docs.map((doc) => {
-          return { ...doc.data(), id: doc.id };
-        }) as Interview[];
-        setInterviews(interviewList);
-        setIsLoading(false);
-      },
-      (error) => {
-        console.log("Error on fetching : ", error);
-        toast.error("Error..", {
-          description: "SOmething went wrong.. Try again later..",
-        });
-        setIsLoading(false);
-      }
-    );
+    try {
+      const interviewCollections = await getDocs(
+        collection(db, "users", user.uid, "interviews")
+      );
 
-    return () => unsubscribe();
+      const interviewList = interviewCollections.docs.map((doc) => ({
+        ...(doc.data() as Interview),
+        id: doc.id,
+      }));
+
+      setInterviews(interviewList);
+    } catch (error) {
+      console.error("Error on fetching:", error);
+      toast.error("Something went wrong", {
+        description: "Try again later.",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!deleteInterviewId || !user?.uid) return;
+
+    try {
+      setIsLoading(true);
+      await deleteDoc(
+        doc(db, "users", user.uid, "interviews", deleteInterviewId)
+      );
+      toast("Deleted!", {
+        description: "Mock Interview removed successfully.",
+      });
+      await getInterviews();
+      setShowDeleteModal(false);
+      setDeleteInterviewId(null);
+    } catch (error) {
+      console.log(error);
+      toast.error("Error!", {
+        description: "Failed to delete. Try again later.",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (user?.uid) {
+      getInterviews();
+    }
   }, [user?.uid]);
 
   return (
@@ -72,6 +111,8 @@ import { toast } from "sonner";
               key={interview.id}
               interview={interview}
               onMockPage={false}
+              showModal={setShowDeleteModal}
+              interviewId={setDeleteInterviewId}
             />
           ))
         ) : (
@@ -100,6 +141,20 @@ import { toast } from "sonner";
           </div>
         )}
       </div>
+      {showDeleteModal && (
+        <ConfirmActionModal
+          title="Delete this mock interview?"
+          description="This action is permanent and cannot be undone."
+          btnName="Delete"
+          isOpen={showDeleteModal}
+          isLoading={isLoading}
+          onClose={() => {
+            setShowDeleteModal(false);
+            setDeleteInterviewId(null);
+          }}
+          onConfirm={handleDelete}
+        />
+      )}
     </>
   );
 };

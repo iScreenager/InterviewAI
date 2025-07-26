@@ -14,28 +14,35 @@ export interface User {
 
 export interface Interview {
   id: string;
+  techStack: string;
   position: string;
   description: string;
   experience: number;
   userId: string;
-  questions: { question: string; answer: string }[];
+  status: "in_progress" | "completed";
   createdAt: Timestamp;
   updateAt: Timestamp;
-  techStack: string;
+  overallFeedback?: overallFeedbackSchema;
+  questions: questionSchema[];
+  interviewSubmitted: boolean;
 }
 
-export interface UserAnswer {
-  id: string;
-  mockIdRef: string;
+export interface questionSchema {
   question: string;
-  correct_ans: string;
-  user_ans: string;
+  answer: string;
+  userAnswer: string;
   feedback: string;
   rating: number;
-  userId: string;
-  createdAt: Timestamp;
-  updateAt: Timestamp;
+  skiped: boolean;
 }
+
+export interface overallFeedbackSchema {
+  strengths: string[];
+  improvements: string[];
+  overallScore: number;
+  summary: string;
+}
+
 
 export interface CategoryItem {
   stack: string;
@@ -45,14 +52,14 @@ export interface CategoryItem {
 export interface Category {
   key: string;
   title: string;
-  heading?: string,
-  description?: string,
+  heading?: string;
+  description?: string;
   icon?: LucideIcon;
   default: CategoryItem[];
 }
 
 export interface AllselectedItemsState {
-   techStacks: string[];
+  techStacks: string[];
   role: string;
   experience: string;
 }

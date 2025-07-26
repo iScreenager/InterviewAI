@@ -3,9 +3,9 @@ import { Button } from "./ui/button";
 import { useContext, useState } from "react";
 import { AuthContext } from "@/context/auth-context";
 import { User as UserIcon } from "lucide-react";
-import { LogoutModal } from "./log-out";
 import { signOut } from "firebase/auth";
 import { auth } from "@/config/firebase.config";
+import { ConfirmActionModal } from "./confirmActionModal";
 
 export const ProfileContainer = () => {
   const { user, setUser, setIsLoading, isLoading } = useContext(AuthContext);
@@ -18,6 +18,7 @@ export const ProfileContainer = () => {
     try {
       await signOut(auth);
       localStorage.removeItem("userData");
+      sessionStorage.removeItem("userData");
       auth.signOut();
       setUser(null);
       navigate("/");
@@ -51,7 +52,10 @@ export const ProfileContainer = () => {
         </Link>
       )}
       {profileClick && (
-        <LogoutModal
+        <ConfirmActionModal
+          title="Log out of your account?"
+          description="You’ll need to sign in again to continue."
+          btnName="Log Out"
           isOpen={profileClick}
           isLoading={isLoading}
           onClose={() => setProfileClick(false)}

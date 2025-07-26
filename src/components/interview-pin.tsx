@@ -3,16 +3,20 @@ import { Card, CardDescription, CardFooter, CardTitle } from "./ui/card";
 import { cn } from "@/lib/utils";
 import { TooltipButton } from "./tooltip-button";
 import { useNavigate } from "react-router-dom";
-import { CircleArrowRight, Newspaper, Pencil } from "lucide-react";
+import { CircleArrowRight, Newspaper, Trash2 } from "lucide-react";
 
 interface InterviewPinProps {
   interview: Interview;
   onMockPage: boolean;
+  showModal: (val: boolean) => void;
+  interviewId: (data: string) => void;
 }
 
 export const InterviewPin = ({
   interview,
   onMockPage = false,
+  showModal,
+  interviewId,
 }: InterviewPinProps) => {
   const createdAtDate = new Date(
     interview.createdAt.toDate()
@@ -49,26 +53,26 @@ export const InterviewPin = ({
         {!onMockPage && (
           <div className="flex items-center justify-center">
             <TooltipButton
-              content="Edit"
-              buttonVariant={"ghost"}
-              onClick={() => {
-                navigate(`/generate/edit/${interview.id}`);
-              }}
-              disbaled={false}
-              buttonClassName="hover:text-red-500"
-              icon={<Pencil />}
-              loading={false}
-            />
-
-            <TooltipButton
               content="Feedback"
               buttonVariant={"ghost"}
               onClick={() => {
                 navigate(`/generate/feedback/${interview.id}`);
               }}
-              disbaled={false}
+              disabled={false}
               buttonClassName="hover:text-red-500"
               icon={<Newspaper />}
+              loading={false}
+            />
+            <TooltipButton
+              content="Delete"
+              buttonVariant={"ghost"}
+              onClick={() => {
+                showModal(true);
+                interviewId(interview.id);
+              }}
+              disabled={false}
+              buttonClassName="hover:text-red-500"
+              icon={<Trash2 />}
               loading={false}
             />
 
@@ -78,7 +82,7 @@ export const InterviewPin = ({
               onClick={() => {
                 navigate(`/generate/interview/${interview.id}`);
               }}
-              disbaled={false}
+              disabled={interview.interviewSubmitted}
               buttonClassName="hover:text-red-500"
               icon={<CircleArrowRight />}
               loading={false}

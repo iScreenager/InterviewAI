@@ -21,15 +21,17 @@ export const MultiTagPicker = ({
   return (
     <div className="flex flex-col gap-3 mt-5">
       <h4 className="flex gap-2 text-lg font-medium items-center text-gray-700">
-        {Icon && <Icon className=" w-5 h-5 text-indigo-500 " />}
+        {Icon && <Icon className=" w-5 h-5 text-[#1BB4C9] " />}
         {title}
       </h4>
       <div className="flex w-full flex-wrap items-center gap-2">
         {defaultTags.map((tech, idx) => (
           <span
             key={idx}
-            className={`px-4 py-2 rounded-full text-sm font-normal shadow-md hover:shadow-gray-500  text-gray-700 cursor-pointer transition ${
-              tech.select ? "bg-[#d0b6ff] " : "bg-gray-100 hover:bg-gray-200   "
+            className={`px-4 py-2 rounded-full text-sm font-normal shadow-md hover:shadow-gray-500   cursor-pointer transition ${
+              tech.select
+                ? "bg-[#1BB4C9] "
+                : "bg-[#EAEFF5] hover:bg-gray-200   "
             }`}
             onClick={() => onToggleTag(tech.stack)}>
             {tech.stack}
@@ -47,7 +49,7 @@ export const MultiTagPicker = ({
               }
             }}
             placeholder="Add other..."
-            className="rounded-full px-4 py-2 text-sm w-40 shadow-md border"
+            className="rounded-full px-4 py-2 text-sm w-40 shadow-md border bg-[#EAEFF5] "
           />
           <Button
             onClick={() => {
@@ -56,7 +58,7 @@ export const MultiTagPicker = ({
                 setInputValue("");
               }
             }}
-            className="rounded-full text-sm  bg-gray-100 hover:bg-gray-200  text-gray-700 shadow-md hover:shadow-gray-500 ">
+            className="rounded-full text-sm  bg-[#EAEFF5] hover:bg-gray-200  text-gray-700 shadow-md hover:shadow-gray-500 ">
             +
           </Button>
         </div>

@@ -64,70 +64,69 @@ export const CategoryPickerGroup = ({
     });
   };
 
- const handleSelectAndUnselectTag = (key: string, tag: string) => {
-   setCategories((prev) =>
-     prev.map((category) => {
-       if (category.key !== key) return category;
+  const handleSelectAndUnselectTag = (key: string, tag: string) => {
+    setCategories((prev) =>
+      prev.map((category) => {
+        if (category.key !== key) return category;
 
-       let updatedDefaults;
+        let updatedDefaults;
 
-       if (key === "role" || key === "experience") {
-         const isSelected = category.default.find(
-           (val) =>
-             val.stack.toLowerCase() === tag.toLowerCase() &&
-             val.select === true
-         );
+        if (key === "role" || key === "experience") {
+          const isSelected = category.default.find(
+            (val) =>
+              val.stack.toLowerCase() === tag.toLowerCase() &&
+              val.select === true
+          );
 
-         // Toggle off if already selected, else select only the clicked one
-         updatedDefaults = category.default.map((val) => ({
-           ...val,
-           select: isSelected
-             ? false
-             : val.stack.toLowerCase() === tag.toLowerCase(),
-         }));
-       } else {
-         updatedDefaults = category.default.map((val) =>
-           val.stack.toLowerCase() === tag.toLowerCase()
-             ? { ...val, select: !val.select }
-             : val
-         );
-       }
+          // Toggle off if already selected, else select only the clicked one
+          updatedDefaults = category.default.map((val) => ({
+            ...val,
+            select: isSelected
+              ? false
+              : val.stack.toLowerCase() === tag.toLowerCase(),
+          }));
+        } else {
+          updatedDefaults = category.default.map((val) =>
+            val.stack.toLowerCase() === tag.toLowerCase()
+              ? { ...val, select: !val.select }
+              : val
+          );
+        }
 
-       return {
-         ...category,
-         default: updatedDefaults,
-       };
-     })
-   );
+        return {
+          ...category,
+          default: updatedDefaults,
+        };
+      })
+    );
 
-   setAllSelectedItems((prev) => {
-     if (key === "role") {
-       return {
-         ...prev,
-         role: prev.role.toLowerCase() === tag.toLowerCase() ? "" : tag,
-       };
-     } else if (key === "experience") {
-       return {
-         ...prev,
-         experience:
-           prev.experience.toLowerCase() === tag.toLowerCase() ? "" : tag,
-       };
-     } else {
-       const exists = prev.techStacks.some(
-         (item) => item.toLowerCase() === tag.toLowerCase()
-       );
-       return {
-         ...prev,
-         techStacks: exists
-           ? prev.techStacks.filter(
-               (item) => item.toLowerCase() !== tag.toLowerCase()
-             )
-           : [...prev.techStacks, tag],
-       };
-     }
-   });
- };
-
+    setAllSelectedItems((prev) => {
+      if (key === "role") {
+        return {
+          ...prev,
+          role: prev.role.toLowerCase() === tag.toLowerCase() ? "" : tag,
+        };
+      } else if (key === "experience") {
+        return {
+          ...prev,
+          experience:
+            prev.experience.toLowerCase() === tag.toLowerCase() ? "" : tag,
+        };
+      } else {
+        const exists = prev.techStacks.some(
+          (item) => item.toLowerCase() === tag.toLowerCase()
+        );
+        return {
+          ...prev,
+          techStacks: exists
+            ? prev.techStacks.filter(
+                (item) => item.toLowerCase() !== tag.toLowerCase()
+              )
+            : [...prev.techStacks, tag],
+        };
+      }
+    });
+  };
 
   return (
     <>
@@ -155,13 +154,13 @@ export const CategoryPickerGroup = ({
 
       {categories[0]?.key === "frontend" &&
         allselectedItems.techStacks.length > 0 && (
-          <div className="mt-8 border rounded-md p-3 bg-gray-100 w-full   ">
+          <div className="mt-8 border rounded-md p-3 bg-[#EAEFF5] w-full">
             <h6 className="font-medium">Selected Technologies</h6>
             <div className="flex flex-wrap gap-2 mt-3">
               {allselectedItems.techStacks.map((stack, index) => (
                 <span
                   key={index}
-                  className="text-xs border px-3 p-1 rounded-2xl bg-[#e2d6f8]">
+                  className="text-xs text-gray-800 border px-3 p-1 rounded-2xl bg-[#93e8f4]">
                   {stack}
                 </span>
               ))}
@@ -172,13 +171,13 @@ export const CategoryPickerGroup = ({
         <div className="flex justify-between mt-5 gap-2">
           <Button
             disabled={currentTab === "TechStack"}
-            className="rounded-full bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 flex items-center gap-2 text-sm shadow-md"
+            className="rounded-full bg-[#3E517F] hover:bg-[#2f52a6]  text-white px-4 py-2 flex items-center gap-2 text-sm shadow-md"
             onClick={goToBackTab}>
             <ChevronLeft className="w-4 h-4" />
             <span className="hidden sm:inline">Back</span>
           </Button>
           <Button
-            className="rounded-full bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 flex items-center gap-2 text-sm shadow-md"
+            className="rounded-full bg-[#3E517F] hover:bg-[#2f52a6] text-white px-4 py-2 flex items-center gap-2 text-sm shadow-md"
             onClick={goToNextTab}
             disabled={
               (currentTab === "TechStack" &&
@@ -187,7 +186,6 @@ export const CategoryPickerGroup = ({
                 (allselectedItems.role === "" ||
                   allselectedItems.experience === ""))
             }>
-         
             <span className="hidden sm:inline"> Next</span>
             <ChevronRight className="w-4 h-4" />
           </Button>
