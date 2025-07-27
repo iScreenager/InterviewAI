@@ -56,8 +56,13 @@ export const QuestionSection = ({
       SpeechRecognition.stopListening();
       setMicAllowed(false);
     } else {
-      SpeechRecognition.startListening({ continuous: true });
+     try {
+      console.log("Start listening")
+      SpeechRecognition.startListening();
       setMicAllowed(true);
+     } catch (error) {
+      console.log("Failed to start")
+     }
     }
   };
   useEffect(() => {
