@@ -5,7 +5,7 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { LoaderPage } from "./loader-page";
 import { toast } from "sonner";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/config/firebase.config";
 import { QuestionSection } from "@/components/QuestionSection/question-section";
 import { useInterview } from "@/context/interview-context";
