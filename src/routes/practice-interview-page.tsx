@@ -74,19 +74,19 @@ export const PracticeInterviewPage = () => {
           if (interviewDoc.exists()) {
             const interviewData = { ...interviewDoc.data() } as Interview;
             setInterview(interviewData);
-            
-            // const lastAnsweredIndex = interviewData.questions?.findIndex(q => q.userAnswer) ?? -1;
             setInterviewStarted(true);
-            // if (lastAnsweredIndex >= 0) {
-            //   setCurrentQuestionIndex(Math.max(lastAnsweredIndex, 0));
-            // } else {
-            //   setCurrentQuestionIndex(0);
-              
-            //   await updateDoc(doc(db, "users", user.uid, "interviews", interviewId), {
-            //     status: "in_progress",
-            //     updateAt: new Date()
-            //   });
-            // }
+            if (interviewData.questions && interviewData.questions.length > 0) {
+              const lastIndex = interviewData.questions.findIndex(
+                (q) => !q.userAnswer && !q.skiped
+              );
+              if (lastIndex === -1) {
+                setCurrentQuestionIndex(interviewData.questions.length - 1);
+              } else {
+                setCurrentQuestionIndex(lastIndex);
+              }
+            } else {
+              setCurrentQuestionIndex(0);
+            }
           } else {
             navigate("/generate", { replace: true });
           }
@@ -155,6 +155,8 @@ export const PracticeInterviewPage = () => {
           }
           currentQuestion={currentQuestionIndex}
           totalQuestions={totalQuestions}
+          questions={interview?.questions || []}
+          setInterview={setInterview}
         />
       </div>
     </div>

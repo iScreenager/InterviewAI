@@ -19,12 +19,16 @@ interface QuestionSectionProps {
   question: questionSchema;
   currentQuestion: number;
   totalQuestions: number;
+  questions: questionSchema[];
+  setInterview: React.Dispatch<React.SetStateAction<any>>;
 }
 
 export const QuestionSection = ({
   question,
   currentQuestion,
   totalQuestions,
+  questions,
+  setInterview,
 }: QuestionSectionProps) => {
   const {
     transcript,
@@ -106,11 +110,16 @@ export const QuestionSection = ({
           <div className="space-y-1">
             <span className="text-sm font-medium">Question Progress</span>
             <div className="flex gap-2">
-              {[...Array(totalQuestions)].map((_, i) => (
-                <span
-                  key={i}
-                  className={`block h-[5px] w-20 rounded-xl ${currentQuestion > i ? "bg-green-400" : "bg-gray-400"}`}></span>
-              ))}
+              {questions.map((q, i) => {
+                let color = "bg-gray-400";
+                if (q.skiped) color = "bg-yellow-400";
+                else if (q.userAnswer) color = "bg-green-400";
+                return (
+                  <span
+                    key={i}
+                    className={`block h-[5px] w-20 rounded-xl ${color}`}></span>
+                );
+              })}
             </div>
           </div>
           <div className="flex gap-8 justify-center mt-2">
@@ -143,6 +152,7 @@ export const QuestionSection = ({
         question={question}
         currentQuestion={currentQuestion}
         setUserAnswer={setUserAnswer}
+        setInterview={setInterview}
       />
     </>
   );
