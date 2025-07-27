@@ -11,7 +11,9 @@ import { QuestionSectionFooter } from "./question-section-footer";
 import { MediaPermissionsContext } from "@/context/media-permissions-context";
 import { useContext, useEffect, useState } from "react";
 import { questionSchema } from "@/types";
-import useSpeechToText from "react-hook-speech-to-text";
+import SpeechRecognition, {
+  useSpeechRecognition,
+} from "react-speech-recognition";
 
 interface QuestionSectionProps {
   question: questionSchema;
@@ -24,12 +26,14 @@ export const QuestionSection = ({
   currentQuestion,
   totalQuestions,
 }: QuestionSectionProps) => {
-  const { startSpeechToText, stopSpeechToText, setResults } = useSpeechToText({
-    continuous: true,
-    useLegacyResults: false,
-  });
+  const {
+    transcript,
+    resetTranscript,
+    listening,
+    browserSupportsSpeechRecognition,
+  } = useSpeechRecognition();
 
-  const { isCamAllowed, isMicAllowed, setCamAllowed } = useContext(
+  const { isCamAllowed, isMicAllowed, setCamAllowed, setMicAllowed } = useContext(
     MediaPermissionsContext
   );
 
@@ -37,38 +41,32 @@ export const QuestionSection = ({
 
   const recordNewAnswer = () => {
     setUserAnswer("");
-    setResults([]);
-    stopSpeechToText();
-    startSpeechToText();
+    setMicAllowed(true)
+    resetTranscript();
+    SpeechRecognition.stopListening();
+    SpeechRecognition.startListening({ continuous: true });
   };
 
-  const recordUserAnswer = async () => {
-    if (isMicAllowed) {
-      stopSpeechToText();
+  const recordUserAnswer = () => {
+    if (listening) {
+      SpeechRecognition.stopListening();
+      setMicAllowed(false);
     } else {
-      startSpeechToText();
+      SpeechRecognition.startListening({ continuous: true });
+      setMicAllowed(true);
     }
   };
   useEffect(() => {
-    setUserAnswer("");
-    setResults([]);
-    stopSpeechToText();
-  }, [currentQuestion]);
-  // useEffect(() => {
-  //   const combinedTranscripts = results
-  //     .filter((result): result is ResultType => typeof result !== "string")
-  //     .map((result) => result.transcript)
-  //     .join(" ");
-
-  //   setUserAnswer(combinedTranscripts);
-  //   return () => {
-  //     stopSpeechToText();
-  //   };
-  // }, [results, stopSpeechToText]);
+    if (!browserSupportsSpeechRecognition) {
+      console.warn("Browser does not support speech recognition.");
+      return;
+    }
+    setUserAnswer(transcript);
+  }, [transcript, browserSupportsSpeechRecognition]);  
 
   return (
     <>
-      <div className="flex flex-col xl:flex-row justify-between  gap-6">
+      <div className="flex flex-col xl:flex-row justify-between gap-6">
         <div className="flex-1">
           <div className="flex flex-col border p-4 rounded-md min-w-80 h-auto">
             <span className="font-medium mb-2">Question:</span>
@@ -92,25 +90,11 @@ export const QuestionSection = ({
                 onChange={(e) => setUserAnswer(e.target.value)}
                 className="w-full h-full resize-none bg-transparent text-sm text-gray-700 outline-none"
               />
-              {/* <p className="text-sm text-gray-700 whitespace-normal">
-                {userAnswer
-                  ? userAnswer
-                  : isMicAllowed
-                    ? "Mic on — start speaking"
-                    : "Mic off — please unmute"}
-              </p>
-
-              {interimResult && (
-                <p className="text-sm text-gray-500 mt-2">
-                  <strong>Current Speech:</strong>
-                  {interimResult}
-                </p>
-              )} */}
             </div>
           </div>
         </div>
 
-        <div className="w-full xl:w-[300px] flex flex-col   rounded-md gap-2">
+        <div className="w-full xl:w-[300px] flex flex-col rounded-md gap-2">
           {isCamAllowed ? (
             <Webcam className="rounded-lg w-full h-[220px] object-cover" />
           ) : (
@@ -125,7 +109,7 @@ export const QuestionSection = ({
               {[...Array(totalQuestions)].map((_, i) => (
                 <span
                   key={i}
-                  className={`block  h-[5px] w-20 rounded-xl ${currentQuestion > i ? "bg-green-400" : "bg-gray-400"}`}></span>
+                  className={`block h-[5px] w-20 rounded-xl ${currentQuestion > i ? "bg-green-400" : "bg-gray-400"}`}></span>
               ))}
             </div>
           </div>
@@ -142,7 +126,7 @@ export const QuestionSection = ({
               )}
             </span>
             <span className="cursor-pointer" onClick={recordUserAnswer}>
-              {isMicAllowed ? (
+              {isMicAllowed && listening ? (
                 <Mic className="text-gray-500" size={20} />
               ) : (
                 <MicOff className="text-gray-500" size={20} />
@@ -159,7 +143,6 @@ export const QuestionSection = ({
         question={question}
         currentQuestion={currentQuestion}
         setUserAnswer={setUserAnswer}
- 
       />
     </>
   );

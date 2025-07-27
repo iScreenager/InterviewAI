@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 
-import { ArrowRight, Camera, ChevronLeft, Mic } from "lucide-react";
+import { ArrowRight, Camera, Mic } from "lucide-react";
 
 import Webcam from "react-webcam";
 
@@ -12,6 +12,7 @@ import { LoaderPage } from "./loader-page";
 
 const PreInterviewPermissions = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [audioLevel, setAudioLevel] = useState(0);
 
   const { interviewId } = useParams<{ interviewId: string }>();
   const navigate = useNavigate();
@@ -40,18 +41,33 @@ const PreInterviewPermissions = () => {
   const handleMicToggle = async (checked: boolean) => {
     if (!checked) {
       setMicAllowed(false);
+      setAudioLevel(0);
       return;
     }
 
     try {
-      await navigator.mediaDevices.getUserMedia({ audio: true });
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       setMicAllowed(true);
+
+      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const source = audioContext.createMediaStreamSource(stream);
+      const analyser = audioContext.createAnalyser();
+      source.connect(analyser);
+      analyser.fftSize = 256;
+      const dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+      const updateVolume = () => {
+        analyser.getByteFrequencyData(dataArray);
+        const volume = dataArray.reduce((a, b) => a + b) / dataArray.length;
+        setAudioLevel(volume*10);
+        requestAnimationFrame(updateVolume);
+      };
+
+      updateVolume();
     } catch (error) {
       console.error("Microphone access denied:", error);
       setMicAllowed(false);
-      alert(
-        "Microphone access was denied. Please enable it in your browser settings."
-      );
+      alert("Microphone access was denied. Please enable it in your browser settings.");
     }
   };
 
@@ -104,6 +120,16 @@ const PreInterviewPermissions = () => {
           </span>
           <Switch checked={isMicAllowed} onCheckedChange={handleMicToggle} />
         </div>
+        {isMicAllowed && (
+          <div className="mt-3">
+            <div className="h-2 bg-gray-200 rounded">
+              <div
+                className="h-full bg-green-500 rounded transition-all duration-100"
+                style={{ width: `${Math.min(audioLevel, 100)}%` }}
+              ></div>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="mt-8 border rounded-md p-3 bg-[#EAEFF5] w-full">
@@ -123,17 +149,16 @@ const PreInterviewPermissions = () => {
         </ul>
       </div>
 
-      <div className="flex justify-between">
+      <div className="flex justify-end">
         <Button
           className="border-none bg-transparent hover:bg-transparent text-black"
           onClick={() => handleNavigation("/generate")}>
-          <ChevronLeft className="w-4 h-4" />
-          <span className="hidden sm:inline">Skip Interview </span>
+          <span className="hidden sm:inline"> Continue Later </span>
         </Button>
         <Button
           className="rounded-full bg-[#3E517F] hover:bg-[#2f52a6] text-white px-4 py-2 flex items-center gap-2 text-sm shadow-md"
           onClick={() =>
-            handleNavigation(`/generate/interview/${interviewId}/start/${0}`)
+            handleNavigation(`/generate/interview/${interviewId}/start`)
           }>
           Start Interview
           <span className="hidden sm:inline">

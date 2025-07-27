@@ -18,6 +18,7 @@ import AboutPage from "./components/aboutPage";
 
 import { useAuth } from "./hooks/useAuth";
 import { PracticeInterviewPage } from "./routes/practice-interview-page";
+import { InterviewProvider } from "./context/interview-context";
 
 const App = () => {
   useAuth({ fetchOnLoad: true });
@@ -39,7 +40,9 @@ const App = () => {
         <Route
           element={
             <ProtectRoutes>
-              <MainLayout />
+              <InterviewProvider>
+                <MainLayout />
+              </InterviewProvider>
             </ProtectRoutes>
           }>
           <Route element={<Generate />} path="/generate">
@@ -51,7 +54,7 @@ const App = () => {
               element={<PreInterviewPermissions />}
             />
             <Route
-              path="interview/:interviewId/start/:questionIndex"
+              path="interview/:interviewId/start"
               element={<PracticeInterviewPage />}
             />
             <Route path="feedback/:interviewId" element={<Feedback />} />
