@@ -7,13 +7,11 @@ import {
   Video,
   VideoOff,
 } from "lucide-react";
+import { useContext, useEffect, useState } from "react";
+import useSpeechToText from "react-hook-speech-to-text";
 import { QuestionSectionFooter } from "./question-section-footer";
 import { MediaPermissionsContext } from "@/context/media-permissions-context";
-import { useContext, useEffect, useState } from "react";
 import { questionSchema } from "@/types";
-import SpeechRecognition, {
-  useSpeechRecognition,
-} from "react-speech-recognition";
 
 interface QuestionSectionProps {
   question: questionSchema;
@@ -31,47 +29,65 @@ export const QuestionSection = ({
   setInterview,
 }: QuestionSectionProps) => {
   const {
-    transcript,
-    resetTranscript,
-    listening,
-    browserSupportsSpeechRecognition,
-  } = useSpeechRecognition();
+    isCamAllowed,
+    isMicAllowed,
+    setCamAllowed,
+    setMicAllowed,
+  } = useContext(MediaPermissionsContext);
 
-  const { isCamAllowed, isMicAllowed, setCamAllowed, setMicAllowed } = useContext(
-    MediaPermissionsContext
-  );
+  const {
+    error,
+    interimResult,
+    results,
+    isRecording,
+    startSpeechToText,
+    stopSpeechToText,
+    setResults,
+  } = useSpeechToText({
+    continuous: true,
+    useLegacyResults: false,
+    speechRecognitionProperties: { interimResults: true },
+  });
 
   const [userAnswer, setUserAnswer] = useState("");
 
-  const recordNewAnswer = () => {
-    setUserAnswer("");
-    setMicAllowed(true)
-    resetTranscript();
-    SpeechRecognition.stopListening();
-    SpeechRecognition.startListening({ continuous: true });
-  };
-
-  const recordUserAnswer = () => {
-    if (listening) {
-      SpeechRecognition.stopListening();
-      setMicAllowed(false);
-    } else {
-     try {
-      console.log("Start listening")
-      SpeechRecognition.startListening();
-      setMicAllowed(true);
-     } catch (error) {
-      console.log("Failed to start")
-     }
-    }
-  };
   useEffect(() => {
-    if (!browserSupportsSpeechRecognition) {
-      console.warn("Browser does not support speech recognition.");
+    if (error) {
+      console.warn("Speech recognition error:", error);
       return;
     }
-    setUserAnswer(transcript);
-  }, [transcript, browserSupportsSpeechRecognition]);  
+
+    const final =
+      results?.length > 0
+        ? typeof results[results.length - 1] === "string"
+          ? results[results.length - 1]
+          : (results[results.length - 1] as any).transcript ?? ""
+        : "";
+
+    const combined = `${final} ${interimResult}`.trim();
+
+    if (combined && combined !== userAnswer) {
+      setUserAnswer(combined);
+    }
+  }, [interimResult, results, error]);
+
+  const recordUserAnswer = () => {
+    if (isRecording) {
+      stopSpeechToText();
+      setMicAllowed(false);
+    } else {
+      startSpeechToText();
+      setMicAllowed(true);
+    }
+  };
+
+  const recordNewAnswer = () => {
+    setUserAnswer("");
+    setMicAllowed(true);
+    setResults([]);
+    stopSpeechToText();
+    startSpeechToText();
+  };
 
   return (
     <>
@@ -87,7 +103,8 @@ export const QuestionSection = ({
               <span className="text-sm font-semibold">Your Answer:</span>
               <span
                 className="text-xs text-red-500 flex items-center gap-1 cursor-pointer"
-                onClick={recordNewAnswer}>
+                onClick={recordNewAnswer}
+              >
                 <RotateCcw size={15} />
                 Reset Answer
               </span>
@@ -116,13 +133,16 @@ export const QuestionSection = ({
             <span className="text-sm font-medium">Question Progress</span>
             <div className="flex gap-2">
               {questions.map((q, i) => {
-                let color = "bg-gray-400";
-                if (q.skiped) color = "bg-yellow-400";
-                else if (q.userAnswer) color = "bg-green-400";
+                const color = q.skiped
+                  ? "bg-yellow-400"
+                  : q.userAnswer
+                    ? "bg-green-400"
+                    : "bg-gray-400";
                 return (
                   <span
                     key={i}
-                    className={`block h-[5px] w-20 rounded-xl ${color}`}></span>
+                    className={`block h-[5px] w-20 rounded-xl ${color}`}
+                  />
                 );
               })}
             </div>
@@ -130,9 +150,7 @@ export const QuestionSection = ({
           <div className="flex gap-8 justify-center mt-2">
             <span
               className="cursor-pointer"
-              onClick={() => {
-                setCamAllowed(!isCamAllowed);
-              }}>
+              onClick={() => setCamAllowed(!isCamAllowed)}>
               {isCamAllowed ? (
                 <Video className="text-gray-500" size={20} />
               ) : (
@@ -140,7 +158,7 @@ export const QuestionSection = ({
               )}
             </span>
             <span className="cursor-pointer" onClick={recordUserAnswer}>
-              {isMicAllowed && listening ? (
+              {isMicAllowed && isRecording ? (
                 <Mic className="text-gray-500" size={20} />
               ) : (
                 <MicOff className="text-gray-500" size={20} />
@@ -151,6 +169,7 @@ export const QuestionSection = ({
       </div>
 
       <hr className="mt-10 w-full" />
+      
       <QuestionSectionFooter
         userAnswer={userAnswer}
         totalQuestions={totalQuestions}
