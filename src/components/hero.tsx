@@ -24,7 +24,6 @@ export const Hero = () => {
               Practice job interview questions based on your job role. Get
               instant AI feedback and expert tips to improve your answers.
             </p>
-            <TestMic/>
             <div className="mt-6">
               <Link to={user ? "/generate/create" : "/signin"}>
                 <Button className="px-6 py-3 text-white font-semibold text-lg rounded-2xl bg-gradient-to-r from-blue-500 to-purple-600 hover:opacity-90 transition">
