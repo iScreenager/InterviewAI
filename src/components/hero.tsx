@@ -5,7 +5,6 @@ import { useContext } from "react";
 import { FaArrowRight } from "react-icons/fa";
 
 import { Link } from "react-router-dom";
-import TestMic from "./test-mic";
 
 export const Hero = () => {
   const { user } = useContext(AuthContext);
