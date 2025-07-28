@@ -42,7 +42,7 @@ export const QuestionSectionFooter = ({
     try {
       if (user?.uid && interviewId) {
         await generateAndStoreOverallFeedback(user.uid, interviewId);
-        navigate(`/generate/feedback/${interviewId}`);
+        navigate(`/feedback/${interviewId}`);
       } else {
         console.warn("User ID or Interview ID is missing");
       }

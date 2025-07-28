@@ -1,14 +1,14 @@
 
-import  AboutPage  from "@/components/aboutPage";
-import  Guide  from "@/components/guide";
-import { Hero } from "@/components/hero";
+import About from "@/components/Home/about";
+import  Guide  from "@/components/Home/guide";
+import { Hero } from "@/components/Home/hero";
 
 const HomePage = () => {
   return (
     <div id="home" className="flex-col w-full mt-5 ">
       <Hero />
       <Guide />
-      <AboutPage />
+      <About />
      
     </div>
   );

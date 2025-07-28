@@ -1,7 +1,7 @@
 import { Target, Users, Zap } from "lucide-react";
-import { Container } from "./container";
+import { Container } from "../container";
 
- const AboutPage = () => {
+ const About = () => {
   const aboutPoints = [
     {
       id: 1,
@@ -63,4 +63,4 @@ import { Container } from "./container";
   );
 };
 
-export default AboutPage;
+export default About;

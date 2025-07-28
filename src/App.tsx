@@ -9,16 +9,16 @@ import HomePage from "./routes/home";
 import SignInPage from "./routes/sing-in";
 import SignUpPage from "./routes/sing-up";
 import Dashboard from "./routes/dashboard";
-import CreateEditPage from "./routes/create-edit-page";
 import PreInterviewPermissions from "./routes/pre-interview-permissions";
 import Feedback from "./routes/feedback";
 import Generate from "./components/generate";
-import Guide from "./components/guide";
-import AboutPage from "./components/aboutPage";
+import Guide from "./components/Home/guide";
 
 import { useAuth } from "./hooks/useAuth";
 import { PracticeInterviewPage } from "./routes/practice-interview-page";
 import { InterviewProvider } from "./context/interview-context";
+import About from "./components/Home/about";
+import SetupInterview from "./routes/setup-interview";
 
 const App = () => {
   useAuth({ fetchOnLoad: true });
@@ -29,7 +29,7 @@ const App = () => {
         <Route element={<PublicLayout />}>
           <Route index path="/" element={<HomePage />} />
           <Route path="/guide" element={<Guide />} />
-          <Route path="/about" element={<AboutPage />} />
+          <Route path="/about" element={<About />} />
         </Route>
 
         <Route element={<AuthenticationLayout />}>
@@ -45,10 +45,10 @@ const App = () => {
               </InterviewProvider>
             </ProtectRoutes>
           }>
-          <Route element={<Generate />} path="/generate">
-            <Route index element={<Dashboard />} />
-            <Route path="create" element={<CreateEditPage />} />
-            <Route path="edit/:interviewId" element={<CreateEditPage />} />
+          <Route element={<Generate />} path="/">
+            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="create" element={<SetupInterview />} />
+            {/* <Route path="edit/:interviewId" element={<SetupInterview />} /> */}
             <Route
               path="interview/:interviewId"
               element={<PreInterviewPermissions />}

@@ -1,5 +1,5 @@
 import { Container } from "@/components/container";
-import { Card, CardDescription, CardTitle } from "./ui/card";
+import { Card, CardDescription, CardTitle } from "../ui/card";
 import { useState } from "react";
 import { CircleCheckBigIcon } from "lucide-react";
 

@@ -1,5 +1,4 @@
 import { AllselectedItemsState, questionSchema } from "@/types";
-import { Button } from "./ui/button";
 import { ChevronLeft, ChevronRight, Loader } from "lucide-react";
 import { useContext, useState } from "react";
 import { toast } from "sonner";
@@ -8,6 +7,7 @@ import { db } from "@/config/firebase.config";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "@/context/auth-context";
 import { generateAiResponse } from "@/utils/generateAiResponse";
+import { Button } from "../ui/button";
 
 interface DetailsTabContentProps {
   allselectedItems: AllselectedItemsState;
@@ -77,7 +77,7 @@ export const DetailsTabContent = ({
         description: toastMessage.description,
       });
 
-      navigate(`/generate/interview/${interviewID}`);
+      navigate(`/interview/${interviewID}`);
     } catch (error) {
       console.error("Interview generation error:", error);
       toast.error("Error....", {

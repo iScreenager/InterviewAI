@@ -56,7 +56,7 @@ export const InterviewPin = ({
               content="Feedback"
               buttonVariant={"ghost"}
               onClick={() => {
-                navigate(`/generate/feedback/${interview.id}`);
+                navigate(`/feedback/${interview.id}`);
               }}
               disabled={false}
               buttonClassName="hover:text-red-500"
@@ -80,7 +80,7 @@ export const InterviewPin = ({
               content="Start"
               buttonVariant={"ghost"}
               onClick={() => {
-                navigate(`/generate/interview/${interview.id}`);
+                navigate(`/interview/${interview.id}`);
               }}
               disabled={interview.interviewSubmitted}
               buttonClassName="hover:text-red-500"

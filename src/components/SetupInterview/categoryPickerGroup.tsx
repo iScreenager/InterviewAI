@@ -1,7 +1,7 @@
-import { MultiTagPicker } from "./multiTagPicker";
-import { Button } from "./ui/button";
 import { AllselectedItemsState, Category } from "@/types";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { MultiTagPicker } from "./multiTagPicker";
+import { Button } from "../ui/button";
 
 interface CategoryPickerGroupProps {
   categories: Category[];
