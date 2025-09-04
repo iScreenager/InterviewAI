@@ -45,7 +45,7 @@ const App = () => {
               </InterviewProvider>
             </ProtectRoutes>
           }>
-          <Route element={<Generate />} path="/">
+          <Route element={<Generate />} path="/generate">
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="create" element={<SetupInterview />} />
             {/* <Route path="edit/:interviewId" element={<SetupInterview />} /> */}
