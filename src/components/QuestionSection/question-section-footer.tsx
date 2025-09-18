@@ -12,6 +12,7 @@ import { generateResult } from "@/utils/generateResult";
 import { db } from "@/config/firebase.config";
 import { generateAndStoreOverallFeedback } from "@/utils/generateOverallFeedback";
 import { useInterview } from "@/context/interview-context";
+import { MediaPermissionsContext } from "@/context/media-permissions-context";
 
 interface QuestionSectionFooterProps {
   userAnswer: string;
@@ -19,7 +20,7 @@ interface QuestionSectionFooterProps {
   currentQuestion: number;
   setUserAnswer: (val: string) => void;
   totalQuestions: number;
-  setInterview: React.Dispatch<React.SetStateAction<any>>;
+  setInterview: React.Dispatch<React.SetStateAction<unknown>>;
 }
 
 export const QuestionSectionFooter = ({
@@ -31,6 +32,7 @@ export const QuestionSectionFooter = ({
   setInterview,
 }: QuestionSectionFooterProps) => {
   const { user } = useContext(AuthContext);
+  const { setCamAllowed, setMicAllowed } = useContext(MediaPermissionsContext);
   const { interviewId } = useParams();
   const { goToNextQuestion } = useInterview();
   const navigate = useNavigate();
@@ -42,6 +44,8 @@ export const QuestionSectionFooter = ({
     try {
       if (user?.uid && interviewId) {
         await generateAndStoreOverallFeedback(user.uid, interviewId);
+        setCamAllowed(false);
+        setMicAllowed(false);
         navigate(`/feedback/${interviewId}`);
       } else {
         console.warn("User ID or Interview ID is missing");
@@ -91,7 +95,7 @@ export const QuestionSectionFooter = ({
         questions,
       });
 
-      setInterview((prev: any) => prev ? { ...prev, questions } : prev);
+      setInterview((prev:unknown) => (prev ? { ...prev, questions } : prev));
 
       toast.success("Question skipped!");
       setUserAnswer("");
@@ -168,7 +172,7 @@ export const QuestionSectionFooter = ({
           questions,
         });
 
-        setInterview((prev: any) => prev ? { ...prev, questions } : prev);
+        setInterview((prev: unknown) => (prev ? { ...prev, questions } : prev));
 
         toast.success("Answer submitted!");
         setUserAnswer("");
@@ -188,46 +192,61 @@ export const QuestionSectionFooter = ({
   };
 
   return (
-    <div className="flex justify-between items-center gap-4 w-full flex-row mt-10">
-      <Button
-        className="border-none bg-transparent hover:bg-transparent text-red-600 flex items-center gap-1 justify-center"
-        onClick={submitAndEndInterview}
-        disabled={loading}
-      >
-        <span className="hidden sm:inline">End Interview</span>
-      </Button>
-      <div className="flex gap-2">
+    <div className="space-y-4">
+      <div className="flex justify-between items-center">
         <Button
           variant="outline"
-          className="rounded-md border-gray-300 hover:bg-gray-50 text-gray-700 px-4 py-2 flex items-center gap-2 text-sm shadow-md justify-center"
-          onClick={handleSkip}
+          className="text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200 hover:border-red-300"
+          onClick={submitAndEndInterview}
           disabled={loading}
         >
-          <span className="flex items-center gap-1">
-            <SkipForwardIcon width={12} height={12}/>
-            Skip
-          </span>
+          End Interview
         </Button>
-        <Button
-          className="rounded-md bg-[#3E517F] hover:bg-[#2f52a6] text-white px-4 py-2 flex items-center gap-2 text-sm shadow-md justify-center"
-          onClick={onSubmit}
-          disabled={loading}
-        >
-          {loading ? (
-            <span className="flex items-center gap-2">
-              <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-              </svg>
-              Submitting...
-            </span>
-          ) : (
-            <>
-              <span className="hidden sm:inline">Submit answer</span>
-              <span className="sm:hidden inline">Submit</span>
-              <Send size={16} />
-            </>
-          )}
-        </Button>
+
+        <div className="flex gap-3">
+          <Button
+            variant="outline"
+            className="px-6 py-2.5 border-gray-300 hover:bg-gray-50"
+            onClick={handleSkip}
+            disabled={loading}
+          >
+            <SkipForwardIcon size={16} className="mr-2" />
+            Skip Question
+          </Button>
+          <Button
+            className="px-8 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={onSubmit}
+            disabled={
+              loading || !userAnswer.trim() || userAnswer.trim().length < 30
+            }
+          >
+            {loading ? (
+              <>
+                <svg
+                  className="animate-spin h-4 w-4 mr-2"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                </svg>
+                Submitting...
+              </>
+            ) : (
+              <>
+                Submit Answer
+                <Send size={16} className="ml-2" />
+              </>
+            )}
+          </Button>
+        </div>
       </div>
     </div>
   );

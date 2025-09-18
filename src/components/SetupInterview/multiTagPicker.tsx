@@ -19,26 +19,27 @@ export const MultiTagPicker = ({
   const [inputValue, setInputValue] = useState("");
 
   return (
-    <div className="flex flex-col gap-3 mt-5">
-      <h4 className="flex gap-2 text-lg font-medium items-center text-gray-700">
-        {Icon && <Icon className=" w-5 h-5 text-[#1BB4C9] " />}
+    <div className="space-y-3">
+      <h4 className="flex gap-2 text-sm font-medium items-center text-gray-600">
+        {Icon && <Icon className="w-4 h-4 text-blue-600" />}
         {title}
       </h4>
       <div className="flex w-full flex-wrap items-center gap-2">
         {defaultTags.map((tech, idx) => (
           <span
             key={idx}
-            className={`px-4 py-2 rounded-full text-sm font-normal shadow-md hover:shadow-gray-500   cursor-pointer transition ${
+            className={`px-3 py-1.5 rounded-full text-sm font-normal cursor-pointer transition-all duration-200 ${
               tech.select
-                ? "bg-[#1BB4C9] "
-                : "bg-[#EAEFF5] hover:bg-gray-200   "
+                ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-sm"
+                : "bg-gray-100 hover:bg-gray-200 text-gray-700"
             }`}
-            onClick={() => onToggleTag(tech.stack)}>
+            onClick={() => onToggleTag(tech.stack)}
+          >
             {tech.stack}
           </span>
         ))}
 
-        <div className="flex gap-2 items-center mt-2">
+        <div className="flex gap-2 items-center">
           <Input
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
@@ -49,7 +50,7 @@ export const MultiTagPicker = ({
               }
             }}
             placeholder="Add other..."
-            className="rounded-full px-4 py-2 text-sm w-40 shadow-md border bg-[#EAEFF5] "
+            className="rounded-full px-3 py-1.5 text-sm w-32 border-gray-200 focus:border-blue-500"
           />
           <Button
             onClick={() => {
@@ -58,7 +59,10 @@ export const MultiTagPicker = ({
                 setInputValue("");
               }
             }}
-            className="rounded-full text-sm  bg-[#EAEFF5] hover:bg-gray-200  text-gray-700 shadow-md hover:shadow-gray-500 ">
+            variant="outline"
+            size="sm"
+            className="rounded-full w-8 h-8 p-0"
+          >
             +
           </Button>
         </div>

@@ -6,11 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { toast } from "sonner";
 import { AuthContext } from "@/context/auth-context";
-import {
-  loginWithEmail,
-  loginWithGoogle,
-  loginAsGuest,
-} from "@/services/auth";
+import { loginWithEmail, loginWithGoogle, loginAsGuest } from "@/services/auth";
 
 export function LoginForm({
   className,
@@ -27,12 +23,12 @@ export function LoginForm({
       const result = await loginWithEmail(email, password);
       localStorage.setItem("userData", JSON.stringify(result.user));
       setUser(JSON.parse(JSON.stringify(result.user)));
-      navigate("/");
-    } catch (error: any) {
+      navigate("/dashboard", { replace: true });
+    } catch (error: unknown) {
       let message = "Invalid email or password. Please try again.";
-      if (error.code === "auth/user-not-found") {
+      if (error === "auth/user-not-found") {
         message = "No user found with this email.";
-      } else if (error.code === "auth/wrong-password") {
+      } else if (error === "auth/wrong-password") {
         message = "Incorrect password.";
       }
       toast.error("Login failed", { description: message });
@@ -44,7 +40,7 @@ export function LoginForm({
       const result = await loginWithGoogle();
       localStorage.setItem("userData", JSON.stringify(result.user));
       setUser(JSON.parse(JSON.stringify(result.user)));
-      navigate("/");
+      navigate("/dashboard", { replace: true });
     } catch {
       toast.error("Login failed", {
         description: "Login with Google failed. Please try again.",
@@ -57,7 +53,7 @@ export function LoginForm({
       const result = await loginAsGuest();
       sessionStorage.setItem("userData", JSON.stringify(result.user));
       setUser(JSON.parse(JSON.stringify(result.user)));
-      navigate("/");
+      navigate("/dashboard", { replace: true });
     } catch {
       toast.error("Guest login failed", {
         description: "Please try again.",
@@ -70,7 +66,8 @@ export function LoginForm({
       <form
         className={cn("flex flex-col gap-6", className)}
         {...props}
-        onSubmit={handleSign}>
+        onSubmit={handleSign}
+      >
         <div className="flex flex-col items-center gap-2 text-center">
           <h1 className="text-2xl font-bold">Welcome Back!</h1>
           <p className="text-sm text-muted-foreground">
@@ -97,11 +94,17 @@ export function LoginForm({
               onChange={(e) => setPassword(e.target.value)}
               required
             />
-            <a href="#" className="ml-auto text-sm text-blue-500 hover:underline">
+            <a
+              href="#"
+              className="ml-auto text-sm text-blue-500 hover:underline"
+            >
               Forgot your password?
             </a>
           </div>
-          <Button type="submit" className="w-full bg-gradient-to-r from-blue-500 to-purple-600">
+          <Button
+            type="submit"
+            className="w-full bg-gradient-to-r from-blue-500 to-purple-600"
+          >
             Login
           </Button>
           <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
@@ -109,16 +112,28 @@ export function LoginForm({
               or
             </span>
           </div>
-          <Button type="button" onClick={handleGoogleSign} variant="outline" className="w-full">
+          <Button
+            type="button"
+            onClick={handleGoogleSign}
+            variant="outline"
+            className="w-full"
+          >
             Login with Google
           </Button>
-          <Button type="button" onClick={handleGuestSign} variant="outline" className="w-full">
+          <Button
+            type="button"
+            onClick={handleGuestSign}
+            variant="outline"
+            className="w-full"
+          >
             Login as Guest
           </Button>
         </div>
         <div className="text-center text-sm">
           Not registered yet?{" "}
-          <a href="/signup" className="underline text-blue-500">Create an account</a>
+          <a href="/signup" className="underline text-blue-500">
+            Create an account
+          </a>
         </div>
       </form>
     </div>

@@ -18,12 +18,13 @@ export const MediaPermissionsContext = createContext<createContextProps>(
 export const MediaPermissionsProvider = ({
   children,
 }: MediaPermissionsProviderProps) => {
-  const [isMicAllowed, setMicAllowed] = useState<boolean>(false);
-  const [isCamAllowed, setCamAllowed] = useState<boolean>(false);
+  const [isMicAllowed, setMicAllowed] = useState<boolean>(true);
+  const [isCamAllowed, setCamAllowed] = useState<boolean>(true);
 
   return (
     <MediaPermissionsContext.Provider
-      value={{ isMicAllowed, isCamAllowed, setMicAllowed, setCamAllowed }}>
+      value={{ isMicAllowed, isCamAllowed, setMicAllowed, setCamAllowed }}
+    >
       {children}
     </MediaPermissionsContext.Provider>
   );

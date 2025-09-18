@@ -1,7 +1,12 @@
 import { useState } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import {
- 
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
+import {
   experienceCategories,
   roleCategories,
   techCategories,
@@ -9,6 +14,8 @@ import {
 import { AllselectedItemsState, Category } from "@/types";
 import { CategoryPickerGroup } from "./categoryPickerGroup";
 import { DetailsTabContent } from "./detailsTabContent";
+import { ArrowLeft } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export const CreateMockup = () => {
   const tabOrder = ["TechStack", "Role", "Details"];
@@ -18,7 +25,6 @@ export const CreateMockup = () => {
   const [roles, setRoles] = useState<Category[]>(roleCategories);
   const [experience, setExperience] =
     useState<Category[]>(experienceCategories);
-  
 
   const [allselectedItems, setAllSelectedItems] =
     useState<AllselectedItemsState>({
@@ -42,76 +48,84 @@ export const CreateMockup = () => {
     }
   }
   return (
-    <div className="w-full max-w-3xl mx-auto p-6 sm:p-8 bg-white shadow-xl rounded-2xl space-y-6">
-      <div className="space-y-1">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">
-          Setup your interview
-        </h1>
-        <p className="text-sm text-gray-500 hidden sm:block">
-          Customize your interview experience based on your skills and goals
-        </p>
-      </div>
+    <div className="">
+      <div className="max-w-3xl mx-auto px-4 py-4">
+        <div className="flex items-center justify-between mb-4">
+          <Link
+            to="/dashboard"
+            className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-800"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Go to Dashboard
+          </Link>
+          <span className="text-sm text-gray-600">
+            Step {tabOrder.indexOf(activeTab) + 1} of {tabOrder.length}
+          </span>
+        </div>
 
-      <Tabs aria-disabled value={activeTab} onValueChange={setActiveTab}>
-        <TabsList>
-          <TabsTrigger
-            className="pointer-events-none cursor-not-allowed"
-            value="TechStack">
-            <span className="block lg:hidden">1</span>
-            <span className="hidden lg:block">1. Tech Stack</span>
-          </TabsTrigger>
-          <TabsTrigger
-            className="pointer-events-none cursor-not-allowed"
-            value="Role">
-            <span className="block lg:hidden">2</span>
-            <span className="hidden lg:block">2. Role</span>
-          </TabsTrigger>
-          <TabsTrigger
-            className="pointer-events-none cursor-not-allowed"
-            value="Details">
-            <span className="block lg:hidden">3</span>
-            <span className="hidden lg:block">3. Details</span>
-          </TabsTrigger>
-        </TabsList>
-        <TabsContent value="TechStack">
-          <CategoryPickerGroup
-            categories={techStack}
-            setCategories={setTechStack}
-            allselectedItems={allselectedItems}
-            setAllSelectedItems={setAllSelectedItems}
-            goToBackTab={goToBackTab}
-            goToNextTab={goToNextTab}
-            currentTab={activeTab}
-          />
-        </TabsContent>
-        <TabsContent value="Role">
-          <CategoryPickerGroup
-            categories={roles}
-            setCategories={setRoles}
-            allselectedItems={allselectedItems}
-            setAllSelectedItems={setAllSelectedItems}
-            goToBackTab={goToBackTab}
-            goToNextTab={goToNextTab}
-            currentTab={activeTab}
-          />
-          <hr className="my-5"></hr>
-          <CategoryPickerGroup
-            categories={experience}
-            setCategories={setExperience}
-            allselectedItems={allselectedItems}
-            setAllSelectedItems={setAllSelectedItems}
-            goToBackTab={goToBackTab}
-            goToNextTab={goToNextTab}
-            currentTab={activeTab}
-          />
-        </TabsContent>
-        <TabsContent value="Details">
-          <DetailsTabContent
-            allselectedItems={allselectedItems}
-            goToBackTab={goToBackTab}
-          />
-        </TabsContent>
-      </Tabs>
+        <Card className="border">
+          <CardHeader className="pb-3">
+            <div>
+              <CardTitle className="text-lg">
+                {activeTab === "TechStack" && "Choose Technologies"}
+                {activeTab === "Role" && "Select Role & Experience"}
+                {activeTab === "Details" && "Review & Create Interview"}
+              </CardTitle>
+              <CardDescription className="text-sm">
+                {activeTab === "TechStack" &&
+                  "Pick the technologies you want to be interviewed on"}
+                {activeTab === "Role" &&
+                  "Define your position and experience level"}
+                {activeTab === "Details" &&
+                  "Review your selections and create the interview"}
+              </CardDescription>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {activeTab === "TechStack" && (
+              <CategoryPickerGroup
+                categories={techStack}
+                setCategories={setTechStack}
+                allselectedItems={allselectedItems}
+                setAllSelectedItems={setAllSelectedItems}
+                goToBackTab={goToBackTab}
+                goToNextTab={goToNextTab}
+                currentTab={activeTab}
+              />
+            )}
+            {activeTab === "Role" && (
+              <div className="space-y-6">
+                <CategoryPickerGroup
+                  categories={roles}
+                  setCategories={setRoles}
+                  allselectedItems={allselectedItems}
+                  setAllSelectedItems={setAllSelectedItems}
+                  goToBackTab={goToBackTab}
+                  goToNextTab={goToNextTab}
+                  currentTab={activeTab}
+                />
+                <div className="border-t pt-6">
+                  <CategoryPickerGroup
+                    categories={experience}
+                    setCategories={setExperience}
+                    allselectedItems={allselectedItems}
+                    setAllSelectedItems={setAllSelectedItems}
+                    goToBackTab={goToBackTab}
+                    goToNextTab={goToNextTab}
+                    currentTab={activeTab}
+                  />
+                </div>
+              </div>
+            )}
+            {activeTab === "Details" && (
+              <DetailsTabContent
+                allselectedItems={allselectedItems}
+                goToBackTab={goToBackTab}
+              />
+            )}
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };

@@ -1,9 +1,14 @@
 import { Interview } from "@/types";
-import { Card, CardDescription, CardFooter, CardTitle } from "./ui/card";
-import { cn } from "@/lib/utils";
-import { TooltipButton } from "./tooltip-button";
+import { Card } from "./ui/card";
+import { Button } from "./ui/button";
 import { useNavigate } from "react-router-dom";
-import { CircleArrowRight, Newspaper, Trash2 } from "lucide-react";
+import {
+  CircleArrowRight,
+  Newspaper,
+  Trash2,
+  Calendar,
+  Clock,
+} from "lucide-react";
 
 interface InterviewPinProps {
   interview: Interview;
@@ -26,70 +31,75 @@ export const InterviewPin = ({
     "en-US",
     { timeStyle: "short" }
   );
-
-  const footerData = `${createdAtDate} - ${createdTime}`;
   const navigate = useNavigate();
   return (
-    <Card className="p-4 rounded-md shadow-ld hover:shadow-ld shadow-gray-400 hover:shadow-gray-400 cursor-pointer transition-all space-y-4">
-      <CardTitle className="text-lg">{interview?.position}</CardTitle>
-      <CardDescription>{interview?.description}</CardDescription>
-      <div className="w-full flex items-center gap-2 flex-wrap">
-        {interview.techStack.split(",").map((word, index) => (
-          <p
-            key={index}
-            className="text-xs text-muted-foreground hover:border-gray-600 hover:text-gray-600 border rounded-xl px-2.5 py-0.5 ">
-            {word}
-          </p>
-        ))}
-      </div>
-      <CardFooter
-        className={cn(
-          "w-full flex items-center p-0",
-          onMockPage ? "justify-end" : "justify-between"
-        )}>
-        <p className="text-[12px] text-muted-foreground truncate whitespace-nowrap">
-          {footerData}
+    <Card className="bg-white border rounded-lg p-4 sm:p-5 hover:shadow-md transition-shadow duration-300 h-full flex flex-col">
+      <div className="mb-4 flex-1">
+        <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
+          {interview?.position}
+        </h3>
+        <p className="text-sm text-gray-600 leading-relaxed line-clamp-3 mb-3">
+          {interview?.description}
         </p>
-        {!onMockPage && (
-          <div className="flex items-center justify-center">
-            <TooltipButton
-              content="Feedback"
-              buttonVariant={"ghost"}
-              onClick={() => {
-                navigate(`/feedback/${interview.id}`);
-              }}
-              disabled={false}
-              buttonClassName="hover:text-red-500"
-              icon={<Newspaper />}
-              loading={false}
-            />
-            <TooltipButton
-              content="Delete"
-              buttonVariant={"ghost"}
-              onClick={() => {
-                showModal(true);
-                interviewId(interview.id);
-              }}
-              disabled={false}
-              buttonClassName="hover:text-red-500"
-              icon={<Trash2 />}
-              loading={false}
-            />
+        <div className="flex flex-wrap gap-1.5 sm:gap-2">
+          {interview.techStack.split(",").map((word, index) => (
+            <span
+              key={index}
+              className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-md border">
+              {word.trim()}
+            </span>
+          ))}
+        </div>
+      </div>
 
-            <TooltipButton
-              content="Start"
-              buttonVariant={"ghost"}
-              onClick={() => {
-                navigate(`/interview/${interview.id}`);
-              }}
+      <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-4 text-xs text-gray-500">
+        <div className="flex items-center gap-1">
+          <Calendar className="w-3 h-3 flex-shrink-0" />
+          <span className="truncate">{createdAtDate}</span>
+        </div>
+        <div className="flex items-center gap-1">
+          <Clock className="w-3 h-3 flex-shrink-0" />
+          <span>{createdTime}</span>
+        </div>
+      </div>
+
+      {!onMockPage && (
+        <div className="pt-3 border-t border-gray-100">
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => navigate(`/feedback/${interview.id}`)}
+                disabled={!interview.interviewSubmitted}
+                className="px-3 py-1.5 text-xs border-gray-300 hover:border-blue-500 hover:bg-blue-50 text-gray-700 hover:text-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:border-gray-300 disabled:hover:bg-transparent disabled:hover:text-gray-700 flex-1">
+                <Newspaper className="w-3 h-3 mr-1" />
+                Feedback
+              </Button>
+
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  showModal(true);
+                  interviewId(interview.id);
+                }}
+                className="px-3 py-1.5 text-xs border-gray-300 hover:border-red-500 hover:bg-red-50 text-gray-700 hover:text-red-700 transition-colors flex-1">
+                <Trash2 className="w-3 h-3 mr-1" />
+                Delete
+              </Button>
+            </div>
+
+            <Button
+              onClick={() => navigate(`/interview/${interview.id}`)}
               disabled={interview.interviewSubmitted}
-              buttonClassName="hover:text-red-500"
-              icon={<CircleArrowRight />}
-              loading={false}
-            />
+              className="px-4 py-1.5 text-xs bg-blue-600 hover:bg-blue-700 text-white font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed w-full">
+              <CircleArrowRight className="w-3 h-3 mr-1" />
+              {interview.interviewSubmitted ? "Completed" : "Start"}
+            </Button>
           </div>
-        )}
-      </CardFooter>
+        </div>
+      )}
     </Card>
   );
 };

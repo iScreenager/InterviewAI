@@ -1,45 +1,28 @@
-import Webcam from "react-webcam";
-import {
-  CameraOffIcon,
-  Mic,
-  MicOff,
-  RotateCcw,
-  Video,
-  VideoOff,
-} from "lucide-react";
-import { useContext, useEffect, useState } from "react";
+import { RotateCcw } from "lucide-react";
+import { useEffect, useState, useContext } from "react";
 import useSpeechToText from "react-hook-speech-to-text";
 import { QuestionSectionFooter } from "./question-section-footer";
-import { MediaPermissionsContext } from "@/context/media-permissions-context";
 import { questionSchema } from "@/types";
+import { MediaPermissionsContext } from "@/context/media-permissions-context";
 
 interface QuestionSectionProps {
   question: questionSchema;
   currentQuestion: number;
   totalQuestions: number;
   questions: questionSchema[];
-  setInterview: React.Dispatch<React.SetStateAction<any>>;
+  setInterview: React.Dispatch<React.SetStateAction<unknown>>;
 }
 
 export const QuestionSection = ({
   question,
   currentQuestion,
   totalQuestions,
-  questions,
   setInterview,
 }: QuestionSectionProps) => {
-  const {
-    isCamAllowed,
-    isMicAllowed,
-    setCamAllowed,
-    setMicAllowed,
-  } = useContext(MediaPermissionsContext);
-
   const {
     error,
     interimResult,
     results,
-    isRecording,
     startSpeechToText,
     stopSpeechToText,
     setResults,
@@ -49,7 +32,32 @@ export const QuestionSection = ({
     speechRecognitionProperties: { interimResults: true },
   });
 
+  const { isMicAllowed, setMicAllowed } = useContext(MediaPermissionsContext);
   const [userAnswer, setUserAnswer] = useState("");
+
+  useEffect(() => {
+    setResults([]);
+  }, [question?.question, setResults]);
+
+  useEffect(() => {
+    if (isMicAllowed) {
+      const timer = setTimeout(() => {
+        startSpeechToText();
+      }, 500);
+      return () => clearTimeout(timer);
+    } else {
+      stopSpeechToText();
+    }
+  }, [isMicAllowed, startSpeechToText, stopSpeechToText]);
+
+  useEffect(() => {
+    if (isMicAllowed) {
+      const timer = setTimeout(() => {
+        startSpeechToText();
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [isMicAllowed, startSpeechToText]);
 
   useEffect(() => {
     if (error) {
@@ -57,119 +65,128 @@ export const QuestionSection = ({
       return;
     }
 
-    const final =
-      results?.length > 0
-        ? typeof results[results.length - 1] === "string"
-          ? results[results.length - 1]
-          : (results[results.length - 1] as any).transcript ?? ""
-        : "";
-
-    const combined = `${final} ${interimResult}`.trim();
-
-    if (combined && combined !== userAnswer) {
-      setUserAnswer(combined);
+    if (!isMicAllowed) {
+      return;
     }
-  }, [interimResult, results, error]);
 
-  const recordUserAnswer = () => {
-    if (isRecording) {
-      stopSpeechToText();
-      setMicAllowed(false);
-    } else {
-      startSpeechToText();
-      setMicAllowed(true);
+    const allFinalResults =
+      results
+        ?.map((result) =>
+          typeof result === "string"
+            ? result
+            : (result as { transcript: string })?.transcript || ""
+        )
+        .filter((result) => result.trim() !== "")
+        .join(" ") || "";
+
+    const currentInterim = interimResult || "";
+    const currentSpeech = [allFinalResults, currentInterim]
+      .filter((part) => part && part.trim() !== "")
+      .join(" ")
+      .trim();
+
+    if (currentSpeech && !currentSpeech.includes("undefined")) {
+      setUserAnswer(currentSpeech);
     }
-  };
+  }, [interimResult, results, error, isMicAllowed]);
 
   const recordNewAnswer = () => {
     setUserAnswer("");
-    setMicAllowed(true);
     setResults([]);
     stopSpeechToText();
     startSpeechToText();
   };
 
   return (
-    <>
-      <div className="flex flex-col xl:flex-row justify-between gap-6">
-        <div className="flex-1">
-          <div className="flex flex-col border p-4 rounded-md min-w-80 h-auto">
-            <span className="font-medium mb-2">Question:</span>
-            <span>{question?.question}</span>
-          </div>
-
-          <div className="mt-10 space-y-1">
-            <div className="flex justify-between items-center">
-              <span className="text-sm font-semibold">Your Answer:</span>
-              <span
-                className="text-xs text-red-500 flex items-center gap-1 cursor-pointer"
-                onClick={recordNewAnswer}
-              >
-                <RotateCcw size={15} />
-                Reset Answer
-              </span>
-            </div>
-
-            <div className="w-full mt-4 p-4 border rounded-md bg-gray-50 h-48">
-              <textarea
-                value={userAnswer}
-                onChange={(e) => setUserAnswer(e.target.value)}
-                className="w-full h-full resize-none bg-transparent text-sm text-gray-700 outline-none"
-              />
-            </div>
-          </div>
+    <div className="space-y-6">
+      <div className="bg-white rounded-xl shadow-sm border p-6">
+        <div className="mb-6">
+          <p className="text-gray-800 text-lg leading-relaxed">
+            {question?.question}
+          </p>
         </div>
 
-        <div className="w-full xl:w-[300px] flex flex-col rounded-md gap-2">
-          {isCamAllowed ? (
-            <Webcam className="rounded-lg w-full h-[220px] object-cover" />
-          ) : (
-            <div className="w-full h-[220px] flex flex-col justify-center items-center bg-[#EAEFF5] rounded-lg text-gray-500">
-              <CameraOffIcon size={40} />
-              <span className="text-sm mt-2">Camera is off</span>
-            </div>
-          )}
-          <div className="space-y-1">
-            <span className="text-sm font-medium">Question Progress</span>
-            <div className="flex gap-2">
-              {questions.map((q, i) => {
-                const color = q.skiped
-                  ? "bg-yellow-400"
-                  : q.userAnswer
-                    ? "bg-green-400"
-                    : "bg-gray-400";
-                return (
-                  <span
-                    key={i}
-                    className={`block h-[5px] w-20 rounded-xl ${color}`}
-                  />
-                );
-              })}
-            </div>
+        <div className="border-t border-gray-200 pt-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-gray-900">Your Answer</h3>
+            <button
+              className="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 px-3 py-1.5 rounded-lg hover:bg-gray-100 transition-colors"
+              onClick={recordNewAnswer}
+            >
+              <RotateCcw size={14} />
+              Reset Answer
+            </button>
           </div>
-          <div className="flex gap-8 justify-center mt-2">
-            <span
-              className="cursor-pointer"
-              onClick={() => setCamAllowed(!isCamAllowed)}>
-              {isCamAllowed ? (
-                <Video className="text-gray-500" size={20} />
-              ) : (
-                <VideoOff className="text-gray-500" size={20} />
-              )}
-            </span>
-            <span className="cursor-pointer" onClick={recordUserAnswer}>
-              {isMicAllowed && isRecording ? (
-                <Mic className="text-gray-500" size={20} />
-              ) : (
-                <MicOff className="text-gray-500" size={20} />
-              )}
-            </span>
+
+          <div className="relative">
+            <textarea
+              value={userAnswer}
+              onChange={(e) => setUserAnswer(e.target.value)}
+              placeholder="Type your answer here or use voice recording..."
+              className="w-full h-40 resize-none border-2 border-gray-200 rounded-lg p-4 text-gray-700 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
+            />
+          </div>
+          <div className="mt-3 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => {
+                  setMicAllowed(!isMicAllowed);
+                }}
+                className={`flex items-center gap-2 text-sm font-medium transition-colors ${
+                  isMicAllowed
+                    ? "text-red-600 hover:text-red-700"
+                    : "text-green-600 hover:text-green-700"
+                }`}
+              >
+                {isMicAllowed ? (
+                  <>
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
+                      />
+                    </svg>
+                    Stop Listening
+                  </>
+                ) : (
+                  <>
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M17 14l2 2m0 0l2-2m-2 2l-2-2m2 2V9a2 2 0 00-2-2H9"
+                      />
+                    </svg>
+                    Start Listening
+                  </>
+                )}
+              </button>
+            </div>
+
+            <div className="text-xs text-red-500">Min 30 characters</div>
           </div>
         </div>
       </div>
 
-      <hr className="mt-10 w-full" />
-      
       <QuestionSectionFooter
         userAnswer={userAnswer}
         totalQuestions={totalQuestions}
@@ -178,6 +195,6 @@ export const QuestionSection = ({
         setUserAnswer={setUserAnswer}
         setInterview={setInterview}
       />
-    </>
+    </div>
   );
 };

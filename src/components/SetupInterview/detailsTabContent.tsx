@@ -1,5 +1,5 @@
 import { AllselectedItemsState, questionSchema } from "@/types";
-import { ChevronLeft, ChevronRight, Loader } from "lucide-react";
+import { ChevronLeft, ChevronRight, Loader, FileText } from "lucide-react";
 import { useContext, useState } from "react";
 import { toast } from "sonner";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "@/context/auth-context";
 import { generateAiResponse } from "@/utils/generateAiResponse";
 import { Button } from "../ui/button";
+import { Badge } from "../ui/badge";
 
 interface DetailsTabContentProps {
   allselectedItems: AllselectedItemsState;
@@ -89,74 +90,91 @@ export const DetailsTabContent = ({
   };
 
   return (
-    <div className=" bg-[#EAEFF5] p-5 rounded-2xl shadow-sm flex flex-col gap-8 ">
-      <h6 className="text-lg font-semibold">Interview Summary</h6>
-      <div className="flex flex-col gap-4 justify-start">
-        <div>
-          <p className="text-sm font-medium">Technologies:</p>
-          {techStacks.length ? (
-            <div className="flex flex-wrap gap-2 mt-2">
-              {techStacks.map((stack, index) => (
-                <span
-                  key={index}
-                  className="bg-[#7cddec] px-4 py-2 text-xs rounded-full ">
-                  {stack}
-                </span>
-              ))}
-            </div>
-          ) : (
-            <p className="text-xs text-gray-400 mt-1">
-              No technologies selected
+    <div className="space-y-6">
+      <div className="bg-gray-50 p-4 rounded-xl border">
+        <h6 className="text-lg font-semibold mb-4 flex items-center gap-2">
+          <FileText className="w-4 h-4 text-blue-600" />
+          Interview Summary
+        </h6>
+        <div className="grid md:grid-cols-3 gap-4">
+          <div className="space-y-2">
+            <p className="font-medium text-gray-700 text-sm">Technologies</p>
+            {techStacks.length ? (
+              <div className="flex flex-wrap gap-1">
+                {techStacks.map((stack, index) => (
+                  <Badge
+                    key={index}
+                    variant="secondary"
+                    className="bg-blue-100 text-blue-800 text-xs"
+                  >
+                    {stack}
+                  </Badge>
+                ))}
+              </div>
+            ) : (
+              <p className="text-xs text-gray-400">No technologies selected</p>
+            )}
+          </div>
+          <div className="space-y-2">
+            <p className="font-medium text-gray-700 text-sm">Role</p>
+            {role ? (
+              <Badge
+                variant="secondary"
+                className="bg-green-100 text-green-800 text-xs"
+              >
+                {role}
+              </Badge>
+            ) : (
+              <p className="text-xs text-gray-400">Not selected</p>
+            )}
+          </div>
+          <div className="space-y-2">
+            <p className="font-medium text-gray-700 text-sm">
+              Experience Level
             </p>
-          )}
-        </div>
-        <div>
-          <p className="font-medium text-sm mb-2">Role:</p>
-          {role ? (
-            <span className="bg-[#7cddec] px-4 py-2 text-xs rounded-full ">
-              {role}
-            </span>
-          ) : (
-            <span className="text-xs text-gray-400">Not selected</span>
-          )}
-        </div>
-        <div>
-          <p className="font-medium text-sm mb-2">Experience Level:</p>
-          {experience ? (
-            <span className="bg-[#7cddec] px-4 py-2 text-xs rounded-full ">
-              {experience}
-            </span>
-          ) : (
-            <span className="text-xs text-gray-400">Not selected</span>
-          )}
+            {experience ? (
+              <Badge
+                variant="secondary"
+                className="bg-purple-100 text-purple-800 text-xs"
+              >
+                {experience}
+              </Badge>
+            ) : (
+              <p className="text-xs text-gray-400">Not selected</p>
+            )}
+          </div>
         </div>
       </div>
 
-      <div className="flex justify-between">
+      <div className="flex justify-between items-center">
         <Button
           disabled={isLoading}
-          className="rounded-full bg-[#3E517F] hover:bg-[#2f52a6] text-white px-4 py-2 flex items-center gap-2 text-sm shadow-md"
-          onClick={goToBackTab}>
+          variant="outline"
+          className="flex items-center gap-2"
+          onClick={goToBackTab}
+        >
           <ChevronLeft className="w-4 h-4" />
-          <span className="hidden sm:inline">Back</span>
+          Back
         </Button>
         <Button
-          className="rounded-full bg-[#3E517F] hover:bg-[#2f52a6] text-white px-4 py-2 flex items-center gap-2 text-sm shadow-md"
+          className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white flex items-center gap-2"
           onClick={handleSubmit}
           disabled={
             isLoading ||
             allselectedItems.techStacks.length === 0 ||
             allselectedItems.role === "" ||
             allselectedItems.experience === ""
-          }>
+          }
+        >
           {isLoading ? (
-            <Loader className="text-gray-50 animate-spin" />
+            <>
+              <Loader className="w-4 h-4 animate-spin" />
+              Creating...
+            </>
           ) : (
             <>
               Create Interview
-              <span className="hidden sm:inline">
-                <ChevronRight className="w-4 h-4" />
-              </span>
+              <ChevronRight className="w-4 h-4" />
             </>
           )}
         </Button>

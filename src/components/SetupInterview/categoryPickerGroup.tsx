@@ -78,7 +78,7 @@ export const CategoryPickerGroup = ({
               val.select === true
           );
 
-          // Toggle off if already selected, else select only the clicked one
+       
           updatedDefaults = category.default.map((val) => ({
             ...val,
             select: isSelected
@@ -129,16 +129,7 @@ export const CategoryPickerGroup = ({
   };
 
   return (
-    <>
-      <div>
-        <h4 className="text-lg font-semibold text-gray-700">
-          {categories[0].heading}
-        </h4>
-        <span className="text-sm text-gray-500">
-          {categories[0].description}
-        </span>
-      </div>
-
+    <div className="space-y-4">
       {categories.map((categoryItem) => (
         <MultiTagPicker
           key={categoryItem.key}
@@ -154,30 +145,36 @@ export const CategoryPickerGroup = ({
 
       {categories[0]?.key === "frontend" &&
         allselectedItems.techStacks.length > 0 && (
-          <div className="mt-8 border rounded-md p-3 bg-[#EAEFF5] w-full">
-            <h6 className="font-medium">Selected Technologies</h6>
-            <div className="flex flex-wrap gap-2 mt-3">
+          <div className="mt-4 border rounded-lg p-3 bg-gray-50">
+            <h6 className="font-medium text-sm text-gray-700">
+              Selected Technologies
+            </h6>
+            <div className="flex flex-wrap gap-2 mt-2">
               {allselectedItems.techStacks.map((stack, index) => (
                 <span
                   key={index}
-                  className="text-xs text-gray-800 border px-3 p-1 rounded-2xl bg-[#93e8f4]">
+                  className="text-xs text-blue-800 bg-blue-100 px-2 py-1 rounded-full"
+                >
                   {stack}
                 </span>
               ))}
             </div>
           </div>
         )}
+
       {categories[0]?.key !== "role" && (
-        <div className="flex justify-between mt-5 gap-2">
+        <div className="flex justify-between mt-4 gap-3">
           <Button
             disabled={currentTab === "TechStack"}
-            className="rounded-full bg-[#3E517F] hover:bg-[#2f52a6]  text-white px-4 py-2 flex items-center gap-2 text-sm shadow-md"
-            onClick={goToBackTab}>
+            variant="outline"
+            className="flex items-center gap-2 text-sm"
+            onClick={goToBackTab}
+          >
             <ChevronLeft className="w-4 h-4" />
             <span className="hidden sm:inline">Back</span>
           </Button>
           <Button
-            className="rounded-full bg-[#3E517F] hover:bg-[#2f52a6] text-white px-4 py-2 flex items-center gap-2 text-sm shadow-md"
+            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white flex items-center gap-2 text-sm"
             onClick={goToNextTab}
             disabled={
               (currentTab === "TechStack" &&
@@ -185,12 +182,13 @@ export const CategoryPickerGroup = ({
               (currentTab === "Role" &&
                 (allselectedItems.role === "" ||
                   allselectedItems.experience === ""))
-            }>
-            <span className="hidden sm:inline"> Next</span>
+            }
+          >
+            <span className="hidden sm:inline">Next</span>
             <ChevronRight className="w-4 h-4" />
           </Button>
         </div>
       )}
-    </>
+    </div>
   );
 };

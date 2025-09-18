@@ -1,15 +1,15 @@
-
-import About from "@/components/Home/about";
-import  Guide  from "@/components/Home/guide";
+import Footer from "@/components/footer";
+import Guide from "@/components/Home/guide";
 import { Hero } from "@/components/Home/hero";
+import { TrackProgress } from "@/components/Home/track-progress";
 
 const HomePage = () => {
   return (
-    <div id="home" className="flex-col w-full mt-5 ">
+    <div id="home" className="flex-col w-full">
       <Hero />
       <Guide />
-      <About />
-     
+      <TrackProgress />
+      <Footer />
     </div>
   );
 };
